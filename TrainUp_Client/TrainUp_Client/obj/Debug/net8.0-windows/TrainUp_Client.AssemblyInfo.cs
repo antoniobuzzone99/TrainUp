@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TrainUp_Client")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4c8d0d888f68646d67ed2134f4e17242148efaf6")]
 [assembly: System.Reflection.AssemblyProductAttribute("TrainUp_Client")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TrainUp_Client")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
