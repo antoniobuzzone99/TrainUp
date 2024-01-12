@@ -76,6 +76,20 @@ namespace WpfApp1
             }
 
         }
-        
+
+        private async void RegisterButton_Click(object sender, RoutedEventArgs e) {
+            // Accedi al NavigationService del Frame dalla finestra principale
+            if (Application.Current.MainWindow is MainWindow mainWindow && mainWindow.MainFrame != null)
+            {
+                // Accedi al NavigationService del Frame dalla finestra principale
+                if (Application.Current.MainWindow is MainWindow && mainWindow.MainFrame != null)
+                {
+                    // Naviga verso una nuova pagina
+                    mainWindow.MainFrame.NavigationService.Navigate(new Page3());
+                }
+            }
+        }
+
+
     }
 }

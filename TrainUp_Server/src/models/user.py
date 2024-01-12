@@ -8,4 +8,6 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.Text, nullable=False)
     password = db.Column(db.Text, nullable=False)
+    age = db.Column(db.Integer, nullable=False)
+    weight = db.Column(db.Integer, nullable=False)
 

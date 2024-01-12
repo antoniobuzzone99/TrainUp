@@ -1,6 +1,6 @@
 import TrainingCard
 from flask import Flask, render_template, flash, redirect, url_for, request, jsonify
-from auth import user_login
+from auth import user_login, user_register
 from models.user import User, db
 #from flask_login import login_user, current_user, LoginManager, logout_user
 import os
@@ -60,6 +60,12 @@ class FitnessApp:
 def login():
     data = request.get_json()
     return user_login(data)
+
+@app.route("/register", methods=['GET', 'POST'])
+def register():
+    data = request.get_json()
+    with app.app_context():
+        return user_register(data)
 
 @app.route("/home", methods=['GET', 'POST'])
 def home():

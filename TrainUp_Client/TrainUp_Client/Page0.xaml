@@ -15,5 +15,7 @@
         <Label Content="Username" HorizontalAlignment="Left" Margin="265,158,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.505,-0.242"/>
         <Label Content="Password" HorizontalAlignment="Left" Margin="265,208,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.505,-0.242"/>
         <Label x:Name="outputLabel" Content="" HorizontalAlignment="Left" Height="27" Margin="265,327,0,0" VerticalAlignment="Top" Width="247"/>
+        <Button x:Name="RegisterButton" Content="Register" HorizontalAlignment="Left" Margin="456,282,0,0" VerticalAlignment="Top" Width="56" Click="RegisterButton_Click"/>
+        <Label Content="Login" FontSize="35" FontFamily="Georgia" HorizontalAlignment="Left" Margin="344,84,0,0" VerticalAlignment="Top" Width="140"/>
     </Grid>
 </Page>

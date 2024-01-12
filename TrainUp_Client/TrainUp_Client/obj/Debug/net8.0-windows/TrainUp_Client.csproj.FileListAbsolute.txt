@@ -23,3 +23,5 @@ C:\Users\abuzz\OneDrive\Desktop\TrainUp\TrainUp_Client\TrainUp_Client\obj\Debug\
 C:\Users\abuzz\OneDrive\Desktop\TrainUp\TrainUp_Client\TrainUp_Client\obj\Debug\net8.0-windows\TrainUp_Client.pdb
 C:\Users\abuzz\OneDrive\Desktop\TrainUp\TrainUp_Client\TrainUp_Client\obj\Debug\net8.0-windows\TrainUp_Client.genruntimeconfig.cache
 C:\Users\abuzz\OneDrive\Desktop\TrainUp\TrainUp_Client\TrainUp_Client\obj\Debug\net8.0-windows\ref\TrainUp_Client.dll
+C:\Users\abuzz\OneDrive\Desktop\TrainUp\TrainUp_Client\TrainUp_Client\obj\Debug\net8.0-windows\Page3.g.cs
+C:\Users\abuzz\OneDrive\Desktop\TrainUp\TrainUp_Client\TrainUp_Client\obj\Debug\net8.0-windows\Page3.baml
