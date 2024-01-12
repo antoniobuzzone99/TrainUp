@@ -5,13 +5,10 @@ from models.user import User, db
 import os
 
 
-SECRET_KEY = os.urandom(32)
-app = Flask(__name__)
-app.config['SECRET_KEY'] = SECRET_KEY
+#SECRET_KEY = os.urandom(32)
+#app = Flask(__name__)
+#app.config['SECRET_KEY'] = SECRET_KEY
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:12345/localhost:3309/TrainUp'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db.init_app(app)
 
 # login_manager = LoginManager(app)
 # login_manager.init_app(app)
@@ -45,9 +42,9 @@ db.init_app(app)
 def user_login(data=None):
     print(db.session.query(User).first())
     if db.session.query(User).filter(User.username == data.get('username'), User.password == data.get('password')).first():
-        return jsonify({'success': 1})
+        return jsonify({'state': '1'})
     else:
-        return jsonify({'success': 0})
+        return jsonify({'state': 'wrong credentials'})
 
 
 # if current_user.is_authenticated:

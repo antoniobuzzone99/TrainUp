@@ -5,6 +5,14 @@ from models.user import User, db
 #from flask_login import login_user, current_user, LoginManager, logout_user
 import os
 
+SECRET_KEY = os.urandom(32)
+
+app = Flask(__name__)
+app.config['SECRET_KEY'] = SECRET_KEY
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:12345@localhost:3309/TrainUp'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db.init_app(app)
+
 class FitnessApp:
     _instance = None
 
@@ -47,12 +55,6 @@ class FitnessApp:
 # user_cards = fitness_app_singleton.get_user_training_cards(user_id=1)
 # print("Schede di allenamento dell'utente:")
 # print(user_cards)
-
-SECRET_KEY = os.urandom(32)
-
-app = Flask(__name__)
-app.config['SECRET_KEY'] = SECRET_KEY
-
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
