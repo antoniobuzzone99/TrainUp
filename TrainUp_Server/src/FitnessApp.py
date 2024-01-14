@@ -1,4 +1,4 @@
-import TrainingCard
+from TrainingCard import TrainingCard
 class FitnessApp:
     _instance = None
 

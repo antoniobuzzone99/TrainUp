@@ -1,4 +1,5 @@
-import TrainingCard, FitnessApp
+from FitnessApp import FitnessApp
+from TrainingCard import TrainingCard
 from flask import Flask, render_template, flash, redirect, url_for, request, jsonify
 from auth import user_login, user_register
 from home import home_card_displayer
@@ -31,8 +32,7 @@ def home():
     data = request.get_json()
     user_cards = fitness_app_singleton.get_user_training_cards(user_id=1)
 
-    home_card_displayer(user_cards)
-
+    return home_card_displayer(user_cards)
 
 
 @app.before_request
@@ -52,5 +52,10 @@ if __name__ == '__main__':
     # Aggiungere esercizi alla scheda di allenamento
     fitness_app_singleton.add_exercise_to_card(new_card.card_id, "Push-ups", sets=3, reps=15, day="Monday")
     fitness_app_singleton.add_exercise_to_card(new_card.card_id, "Squats", sets=4, reps=12, day="Wednesday")
+
+    user_cards = fitness_app_singleton.get_user_training_cards(user_id=1)
+    with app.app_context():
+        print(home_card_displayer(user_cards))
+    #print(user_cards)
 
     app.run(host="0.0.0.0", port=5000)

@@ -9,6 +9,9 @@
       Title="Page1">
 
     <Grid>
-        <TextBlock Text="Home" FontSize="35"></TextBlock>
+        <StackPanel Name="cardPanel" Margin="162,131,162,166">
+
+        </StackPanel>
+        <TextBlock Text="Home" FontSize="35" Margin="348,0,348,400"/>
     </Grid>
 </Page>
