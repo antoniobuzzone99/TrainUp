@@ -52,3 +52,12 @@ E:\E-ArchivioLorenzo\UNIVERSITA'\TrainUp\TrainUp_Client\TrainUp_Client\obj\Debug
 E:\E-ArchivioLorenzo\UNIVERSITA'\TrainUp\TrainUp_Client\TrainUp_Client\obj\Debug\net8.0-windows\TrainUp_Client.pdb
 E:\E-ArchivioLorenzo\UNIVERSITA'\TrainUp\TrainUp_Client\TrainUp_Client\obj\Debug\net8.0-windows\TrainUp_Client.genruntimeconfig.cache
 E:\E-ArchivioLorenzo\UNIVERSITA'\TrainUp\TrainUp_Client\TrainUp_Client\obj\Debug\net8.0-windows\ref\TrainUp_Client.dll
+C:\Users\abuzz\OneDrive\Desktop\TrainUp\TrainUp_Client\TrainUp_Client\obj\Debug\net8.0-windows\Page2.g.cs
+C:\Users\abuzz\OneDrive\Desktop\TrainUp\TrainUp_Client\TrainUp_Client\obj\Debug\net8.0-windows\Page2.baml
+C:\Users\abuzz\OneDrive\Desktop\TrainUp\TrainUp_Client\TrainUp_Client\obj\Debug\net8.0-windows\TrainUp_Client.csproj.AssemblyReference.cache
+C:\Users\abuzz\OneDrive\Desktop\TrainUp\TrainUp_Client\TrainUp_Client\bin\Debug\net8.0-windows\Newtonsoft.Json.dll
+C:\Users\abuzz\OneDrive\Desktop\TrainUp\TrainUp_Client\TrainUp_Client\obj\Debug\net8.0-windows\TrainUp_Client.csproj.CopyComplete
+C:\Users\abuzz\OneDrive\Desktop\TrainUp\TrainUp_Client\TrainUp_Client\obj\Debug\net8.0-windows\Page4.g.cs
+C:\Users\abuzz\OneDrive\Desktop\TrainUp\TrainUp_Client\TrainUp_Client\obj\Debug\net8.0-windows\Page4.baml
+C:\Users\abuzz\OneDrive\Desktop\TrainUp\TrainUp_Client\TrainUp_Client\bin\Debug\net8.0-windows\Microsoft.Extensions.DependencyInjection.dll
+C:\Users\abuzz\OneDrive\Desktop\TrainUp\TrainUp_Client\TrainUp_Client\bin\Debug\net8.0-windows\Microsoft.Extensions.DependencyInjection.Abstractions.dll

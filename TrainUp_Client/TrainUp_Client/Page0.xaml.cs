@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
@@ -14,6 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TrainUp_Client;
 
 namespace WpfApp1
 {
@@ -22,16 +25,22 @@ namespace WpfApp1
     /// </summary>
     public partial class Page0 : Page
     {
-        public Page0()
+
+        private readonly HttpClientService _httpClientService;
+        public Page0(HttpClientService httpClientService)
         {
+            _httpClientService = httpClientService;
             InitializeComponent();
+            Debug.WriteLine($"page 0:HttpClient instance created: {_httpClientService.Client != null}");
         }
+
+
         private async void SubmitButton_Click(object sender, RoutedEventArgs e)
         {
             string username = UsernameBox.Text;
-            string password = PasswordBox.Text;
+            string password = PasswordBox.Password;
 
-            using (HttpClient client = new HttpClient())
+            using (HttpClient client = _httpClientService.Client)
             {
                 string url = $"http://localhost:5000/login";
                 var data = new { username, password };
@@ -45,21 +54,17 @@ namespace WpfApp1
                 // Esegui la richiesta HTTP POST
                 HttpResponseMessage response = await client.PostAsync(url, content);
 
-                // Verifica se la risposta ha avuto successo
-                //response.EnsureSuccessStatusCode();
-
                 // Leggi la risposta come stringa
                 string responseString = await response.Content.ReadAsStringAsync();
 
-                // Aggiorna un'etichetta nell'interfaccia utente con il risultato
-                outputLabel.Content = responseString;
 
                 // Controlla la risposta JSON per il successo
-                var responseObject = JsonSerializer.Deserialize<Dictionary<string, string>>(responseString);
-                string state = (string)responseObject["state"];
-                
+                var responseObject = JsonSerializer.Deserialize<Dictionary<string, int>>(responseString);
+                int state = (int)responseObject["state"];
+    
 
-                if (state == "1"){
+                if (state == 1)
+                {
                     // Accedi al NavigationService del Frame dalla finestra principale
                     if (Application.Current.MainWindow is MainWindow mainWindow && mainWindow.MainFrame != null)
                     {
@@ -67,11 +72,13 @@ namespace WpfApp1
                         if (Application.Current.MainWindow is MainWindow && mainWindow.MainFrame != null)
                         {
                             // Naviga verso una nuova pagina
-                            mainWindow.MainFrame.NavigationService.Navigate(new Page1());
+                            mainWindow.MainFrame.NavigationService.Navigate(new Page1(_httpClientService));
+                            
                         }
                     }
-
-
+                }
+                else {
+                    outputLabel.Visibility = Visibility.Visible;
                 }
             }
 
@@ -85,7 +92,7 @@ namespace WpfApp1
                 if (Application.Current.MainWindow is MainWindow && mainWindow.MainFrame != null)
                 {
                     // Naviga verso una nuova pagina
-                    mainWindow.MainFrame.NavigationService.Navigate(new Page3());
+                    mainWindow.MainFrame.NavigationService.Navigate(new Page3(_httpClientService));
                 }
             }
         }

@@ -9,9 +9,14 @@
       Title="Page1">
 
     <Grid>
-        <StackPanel Name="cardPanel" Margin="162,131,162,166">
+        <StackPanel Name="cardPanel" Margin="202,58,122,179">
 
         </StackPanel>
-        <TextBlock Text="Home" FontSize="35" Margin="348,0,348,400"/>
+        <Button x:Name="Logout" BorderThickness="0" Content="Logout" HorizontalAlignment="Left" Margin="25,173,0,0" VerticalAlignment="Top" Width="130" Click="LogoutButton_Click" Height="26" RenderTransformOrigin="-6.619,3.283"/>
+        <Label Content="TrainUp Home" FontFamily="Georgia" FontSize="24" HorizontalAlignment="Left" Margin="18,8,0,0" VerticalAlignment="Top" Width="174"/>
+        <Label x:Name="labelerror" Content="" HorizontalAlignment="Left" Margin="0,365,0,0" VerticalAlignment="Top" Width="790" Height="75"/>
+        <Button x:Name="Setting" BorderThickness="0" Content="Aggiorna i tuoi dati" HorizontalAlignment="Left" Margin="25,87,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.084,-0.084" Width="130" Height="26" Click="Setting_Click"/>
+        <Button x:Name="Setting2" BorderThickness="0" Content="Definisci i tuoi obiettivi" HorizontalAlignment="Left" Margin="25,130,0,0" VerticalAlignment="Top" Width="130" Height="26"/>
+        <Button x:Name="Setting1" BorderThickness="0" Content="Crea la tua scheda" HorizontalAlignment="Left" Margin="25,46,0,0" VerticalAlignment="Top" Width="130" Height="26"/>
     </Grid>
 </Page>

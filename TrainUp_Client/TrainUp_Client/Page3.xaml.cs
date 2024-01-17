@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TrainUp_Client;
 
 namespace WpfApp1
 {
@@ -22,9 +23,11 @@ namespace WpfApp1
     /// </summary>
     public partial class Page3 : Page
     {
-        public Page3()
+        private readonly HttpClientService _httpClientService;
+        public Page3(HttpClientService httpClientService)
         {
             InitializeComponent();
+            _httpClientService = httpClientService;
         }
 
         private async void LoginButton_Click(object sender, RoutedEventArgs e)
@@ -36,7 +39,7 @@ namespace WpfApp1
                 if (Application.Current.MainWindow is MainWindow && mainWindow.MainFrame != null)
                 {
                     // Naviga verso una nuova pagina
-                    mainWindow.MainFrame.NavigationService.Navigate(new Page0());
+                    mainWindow.MainFrame.NavigationService.Navigate(new Page0(_httpClientService));
                 }
             }
         }
@@ -44,10 +47,11 @@ namespace WpfApp1
         private async void SubmitButton_Click(object sender, RoutedEventArgs e)
         {
             string username = UsernameBox.Text;
-            string password = PasswordBox.Text;
-            string confirmPassword = ConfirmPasswordBox.Text;
+            string password = PasswordBox.Password;
+            string confirmPassword = ConfirmPasswordBox.Password;
             string age = AgeBox.Text;
             string weight = WeightBox.Text;
+            
 
             using (HttpClient client = new HttpClient())
             {
@@ -63,18 +67,15 @@ namespace WpfApp1
                 // Esegui la richiesta HTTP POST
                 HttpResponseMessage response = await client.PostAsync(url, content);
 
-                // Verifica se la risposta ha avuto successo
-                //response.EnsureSuccessStatusCode();
-
                 // Leggi la risposta come stringa
                 string responseString = await response.Content.ReadAsStringAsync();
 
                 // Controlla la risposta JSON per il successo
-                var responseObject = JsonSerializer.Deserialize<Dictionary<string, string>>(responseString);
-                string state = (string)responseObject["state"];
+                var responseObject = JsonSerializer.Deserialize<Dictionary<string, int>>(responseString);
+                int state = (int)responseObject["state"];
 
 
-                if (state == "1")
+                if (state == 0)
                 {
                     // Accedi al NavigationService del Frame dalla finestra principale
                     if (Application.Current.MainWindow is MainWindow mainWindow && mainWindow.MainFrame != null)
@@ -83,11 +84,16 @@ namespace WpfApp1
                         if (Application.Current.MainWindow is MainWindow && mainWindow.MainFrame != null)
                         {
                             // Naviga verso una nuova pagina
-                            mainWindow.MainFrame.NavigationService.Navigate(new Page1());
+                            mainWindow.MainFrame.NavigationService.Navigate(new Page1(_httpClientService));
                         }
                     }
-
-
+                }
+                else if (state == 2)
+                {
+                    outputLabel.Visibility = Visibility.Visible;
+                }
+                else {
+                    outputLabel2.Visibility = Visibility.Visible;
                 }
             }
 

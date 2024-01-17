@@ -9,19 +9,21 @@
       Title="Page1">
 
     <Grid>
-        <Button x:Name="SubmitButton" Content="Submit" HorizontalAlignment="Left" Margin="265,364,0,0" VerticalAlignment="Top" Width="57" Click="SubmitButton_Click"/>
+        <Button x:Name="SubmitButton" Content="Submit" HorizontalAlignment="Left" Margin="265,389,0,0" VerticalAlignment="Top" Width="57" Click="SubmitButton_Click"/>
         <TextBox x:Name="UsernameBox" HorizontalAlignment="Left" Height="25" Margin="265,93,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="247"/>
-        <TextBox x:Name="PasswordBox" HorizontalAlignment="Left" Height="25" Margin="265,154,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="247"/>
         <Label Content="Username" HorizontalAlignment="Left" Margin="265,62,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.505,-0.242"/>
         <Label Content="Password" HorizontalAlignment="Left" Margin="265,123,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.505,-0.242"/>
         <Label Content="ConfirmPassword" HorizontalAlignment="Left" Margin="265,179,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="ConfirmPasswordBox" HorizontalAlignment="Left" Margin="265,210,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="247" Height="25"/>
         <Label Content="Age" HorizontalAlignment="Left" Margin="265,235,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="AgeBox" HorizontalAlignment="Left" Margin="265,261,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="247" Height="25"/>
         <TextBox x:Name="WeightBox" HorizontalAlignment="Left" Margin="265,317,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="247" Height="26"/>
         <Label Content="Weight" HorizontalAlignment="Left" Margin="265,286,0,0" VerticalAlignment="Top"/>
         <Label Content="Register" FontSize="25" FontFamily="Georgia" HorizontalAlignment="Left" Margin="338,23,0,0" VerticalAlignment="Top"/>
-        <Button Content="Login" HorizontalAlignment="Left" Margin="456,364,0,0" VerticalAlignment="Top" Width="56" Click="LoginButton_Click"/>
+        <Button Content="Login" HorizontalAlignment="Left" Margin="456,389,0,0" VerticalAlignment="Top" Width="56" Click="LoginButton_Click"/>
+        <Label x:Name="outputLabel" Visibility="Hidden" Foreground="Red" Content="Password diverse" HorizontalAlignment="Left" Margin="265,348,0,0" VerticalAlignment="Top" Width="102"/>
+        <PasswordBox x:Name="PasswordBox" HorizontalAlignment="Left" Margin="265,154,0,0" VerticalAlignment="Top" Width="247" Height="25"/>
+        <PasswordBox x:Name="ConfirmPasswordBox" HorizontalAlignment="Left" Margin="265,210,0,0" VerticalAlignment="Top" Width="247" Height="25"/>
+        <Label x:Name="outputLabel2" Visibility="Hidden"  Foreground="Red" Content="Compilare tutti i campi" HorizontalAlignment="Left" Margin="381,348,0,0" VerticalAlignment="Top" Width="131"/>
 
     </Grid>
 </Page>

@@ -1,8 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "O4+WCkQoa7ye/aUKKtaTpnt8QbrWRMlIt4Obe2kWjEaU3Aq7PypjjQJjzOk09T1JoUHJWXvbBsOY3CAineHv4g==",
+  "dgSpecHash": "rnGMO2V+KPE2mGMYubvi9pkYkZz7xRISNUKaWuB7r3gkUnxvSA1GqHxJ5K9Q/3oIhJ3KuibO3g10YaxW/8eE+A==",
   "success": true,
-  "projectFilePath": "E:\\E-ArchivioLorenzo\\UNIVERSITA'\\TrainUp\\TrainUp_Client\\TrainUp_Client\\TrainUp_Client.csproj",
-  "expectedPackageFiles": [],
+  "projectFilePath": "C:\\Users\\abuzz\\OneDrive\\Desktop\\TrainUp\\TrainUp_Client\\TrainUp_Client\\TrainUp_Client.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\abuzz\\.nuget\\packages\\microsoft.extensions.dependencyinjection\\8.0.0\\microsoft.extensions.dependencyinjection.8.0.0.nupkg.sha512",
+    "C:\\Users\\abuzz\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\8.0.0\\microsoft.extensions.dependencyinjection.abstractions.8.0.0.nupkg.sha512",
+    "C:\\Users\\abuzz\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512"
+  ],
   "logs": []
 }

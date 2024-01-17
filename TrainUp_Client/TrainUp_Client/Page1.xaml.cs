@@ -5,7 +5,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Reflection.Metadata;
 using System.Text;
-using System.Text.Json;
+//using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -17,6 +17,10 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 
 using System.Windows.Shapes;
+using TrainUp_Client;
+
+using Newtonsoft.Json;
+using System.Diagnostics;
 
 namespace WpfApp1
 {
@@ -25,62 +29,156 @@ namespace WpfApp1
     /// </summary>
     public partial class Page1 : Page
     {
-        public Page1()
+        private readonly HttpClientService _httpClientService;
+        public Page1(HttpClientService httpClientService)
         {
+            _httpClientService = httpClientService;
+            Debug.WriteLine($"page 1:HttpClient instance created: {_httpClientService.Client != null}");
             InitializeComponent();
             LoadDataFromServer();
-
+            
         }
         private async void LoadDataFromServer()
         {
-            using (HttpClient client = new HttpClient())
+            Debug.WriteLine($"page 1bis:HttpClient instance created: {_httpClientService.Client != null}");
+            using (HttpClient client = _httpClientService.Client)
             {
+                Debug.WriteLine($"page 2bis:HttpClient instance created: {_httpClientService.Client != null}");
 
-                //client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                string url = "http://localhost:5000/home"; 
 
-                string url = "http://localhost:5000/home"; // Sostituisci con l'URL del tuo server Flask
-
-                //HttpResponseMessage response = await client.GetAsync(url);
-
-                var content = new StringContent(JsonSerializer.Serialize("date"), Encoding.UTF8, "application/json");
-                var response = await client.PostAsync(url, content);
-
+      
+                var content = new StringContent(System.Text.Json.JsonSerializer.Serialize("date"), Encoding.UTF8, "application/json");
+                HttpResponseMessage response = await client.PostAsync(url, content);
                 string jsonString = await response.Content.ReadAsStringAsync();
 
-                var trainingCardsDict = JsonSerializer.Deserialize <Dictionary<string, List<TrainingCard>>>(jsonString);
+                JsonResponse jsonResponse = JsonConvert.DeserializeObject<JsonResponse>(jsonString);
+                var trainingCards = jsonResponse.UserCards;
 
-                var trainingCards = trainingCardsDict["user_cards"];
 
-                foreach (TrainingCard trainingCard in trainingCards){
-                    Button button = new Button();
-                    button.Content = trainingCard.CardId;
-                    cardPanel.Children.Add(button);
+                foreach (UserCard trainingCard in trainingCards){
+                    // Verifica se un bottone con lo stesso CardId esiste già nel cardPanel
+                    bool buttonExists = cardPanel.Children.OfType<Button>().Any(b => b.Name.Equals("bottone_" + trainingCard.CardId.ToString()));
+                    if (!buttonExists) {
+                        Button button = new Button();
+                        button.Name = "bottone_"+trainingCard.CardId.ToString();
+                        button.Content = "Scheda "+trainingCard.CardId;
+                        button.BorderBrush = new SolidColorBrush(Colors.DarkBlue);
+                        button.FontSize = 15;
+                        button.Width = 200;
+                        button.Height = 40;
+                        button.FontFamily = new FontFamily("Georgia");
+                        button.Margin = new Thickness(0,0,0,10);
+                        cardPanel.Children.Add(button);
+             
+                        // Aggiunta del gestore dell'evento senza chiamarlo direttamente
+                        button.Click += (sender, e) => CardButtonClick(sender, e, trainingCard);
+
+                    }
+                   
                 }
 
             }
         }
+
+        private async void CardButtonClick(object sender, RoutedEventArgs e, UserCard trainingCard)
+        {
+
+            if (Application.Current.MainWindow is MainWindow mainWindow && mainWindow.MainFrame != null)
+            {
+                // Accedi al NavigationService del Frame dalla finestra principale
+                if (Application.Current.MainWindow is MainWindow && mainWindow.MainFrame != null)
+                {
+                    // Naviga verso una nuova pagina
+                    mainWindow.MainFrame.NavigationService.Navigate(new Page2(_httpClientService, trainingCard));
+                }
+            }
+        }
+
+        private async void LogoutButton_Click(object sender, RoutedEventArgs e)
+        {
+            using (HttpClient client = _httpClientService.Client)
+            {
+                string url = $"http://localhost:5000/logout";
+                // Esegui la richiesta HTTP POST
+                HttpResponseMessage response = await client.PostAsync(url, null);
+
+                // Leggi la risposta come stringa
+                string responseString = await response.Content.ReadAsStringAsync();
+
+
+                // Controlla la risposta JSON per il successo
+                //var responseObject = JsonSerializer.Deserialize<Dictionary<string, int>>(responseString);
+                var responseObject = JsonConvert.DeserializeObject<Dictionary<string, int>>(responseString);
+                int state = (int)responseObject["state"];
+                
+
+                if (state == 0)
+                {
+                    // Accedi al NavigationService del Frame dalla finestra principale
+                    if (Application.Current.MainWindow is MainWindow mainWindow && mainWindow.MainFrame != null)
+                    {
+                        // Accedi al NavigationService del Frame dalla finestra principale
+                        if (Application.Current.MainWindow is MainWindow && mainWindow.MainFrame != null)
+                        {
+                            // Naviga verso una nuova pagina
+                            mainWindow.MainFrame.NavigationService.Navigate(new Page0(_httpClientService));
+                        }
+                    }
+                }
+            }
+
+        }
+
+        private void Setting_Click(object sender, RoutedEventArgs e)
+        {
+            //funzione aggirona dati
+
+            if (Application.Current.MainWindow is MainWindow mainWindow && mainWindow.MainFrame != null)
+            {
+                // Accedi al NavigationService del Frame dalla finestra principale
+                if (Application.Current.MainWindow is MainWindow && mainWindow.MainFrame != null)
+                {
+                    // Naviga verso una nuova pagina
+                    mainWindow.MainFrame.NavigationService.Navigate(new Page4(_httpClientService));
+                }
+            }
+        }
+
+    }
+
+   
+    public class JsonResponse
+    {
+        [JsonProperty("user_cards")]
+        public List<UserCard> UserCards { get; set; }
+    }
+
+    public class UserCard
+    {
+        [JsonProperty("card_id")]
+        public int CardId { get; set; }
+
+        [JsonProperty("exercises")]
+        public List<Exercise> Exercises { get; set; }
+
+        [JsonProperty("user_id")]
+        public int UserId { get; set; }
     }
 
     public class Exercise
     {
-        public string Name { get; private set; }
-        public int Sets { get; private set; }
-        public int Reps { get; private set; }
-        public string Day { get; private set; }
+        [JsonProperty("day")]
+        public string Day { get; set; }
 
-        public Exercise(string name, int sets, int reps, string day)
-        {
-            Name = name;
-            Sets = sets;
-            Reps = reps;
-            Day = day;
-        }
-    }
-    public class TrainingCard
-    {
-        public int CardId { get; private set; }
-        public int UserId { get; private set; }
-        public List<Exercise> Exercises { get; private set; }
+        [JsonProperty("name")]
+        public string Name { get; set; }
+
+        [JsonProperty("reps")]
+        public int Reps { get; set; }
+
+        [JsonProperty("sets")]
+        public int Sets { get; set; }
     }
 
 }
