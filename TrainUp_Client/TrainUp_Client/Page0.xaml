@@ -15,7 +15,7 @@
         <Label Content="Password" HorizontalAlignment="Center" Margin="0,247,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.505,-0.242" Width="256"/>
         <Button x:Name="RegisterButton"  BorderBrush="Black" Background="DarkOliveGreen" Foreground="White" Content="Register" HorizontalAlignment="Center" VerticalAlignment="Top" Width="246" Click="RegisterButton_Click" RenderTransformOrigin="1.603,0.746" Margin="0,365,0,0" Height="24"/>
         <PasswordBox x:Name="PasswordBox" HorizontalAlignment="Center" Margin="0,275,0,0" VerticalAlignment="Top" Width="246" Height="25"/>
-        <Label x:Name="outputLabel"  Foreground="Red" Content="username e/o password errati" HorizontalAlignment="Left" VerticalAlignment="Top" Width="252" Margin="121,300,0,0"/>
+        <Label x:Name="outputLabel" Visibility="Hidden" Foreground="Red" Content="username e/o password errati" HorizontalAlignment="Left" VerticalAlignment="Top" Width="252" Margin="121,300,0,0"/>
         <Image Source="C:\Users\abuzz\OneDrive\Desktop\Elab_APL\image\esercizio.png" Width="120" Height="120" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,66,0,0"/>
     </Grid>
 </Page>

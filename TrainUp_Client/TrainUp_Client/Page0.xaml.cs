@@ -62,11 +62,11 @@ namespace WpfApp1
                 // Controlla la risposta JSON per il successo
                 var responseObject = JsonSerializer.Deserialize<Dictionary<string, string>>(responseString);
                 string state = responseObject["state"];
-                string token = responseObject["token"];
 
 
                 if (state == "success")
                 {
+                    string token = responseObject["token"];
                     // Accedi al NavigationService del Frame dalla finestra principale
                     if (Application.Current.MainWindow is MainWindow mainWindow && mainWindow.MainFrame != null)
                     {

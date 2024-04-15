@@ -72,13 +72,14 @@ namespace WpfApp1
                 // Controlla la risposta JSON per il successo
                 var responseObject = JsonSerializer.Deserialize<Dictionary<string, string>>(responseString);
                 string state = responseObject["state"];
-                string token = responseObject["token"];
+                
 
                 string success = "success";
                 string fault1 = "fault1";
                 string fault2 = "fault2";
                 if (state == success)
                 {
+                    string token = responseObject["token"];
                     // Accedi al NavigationService del Frame dalla finestra principale
                     if (Application.Current.MainWindow is MainWindow mainWindow && mainWindow.MainFrame != null)
                     {
@@ -93,9 +94,11 @@ namespace WpfApp1
                 else if (state == fault2)
                 {
                     outputLabel.Visibility = Visibility.Visible;
+                    outputLabel2.Visibility = Visibility.Hidden;
                 }
                 else if (state == fault1){
                     outputLabel2.Visibility = Visibility.Visible;
+                    outputLabel.Visibility = Visibility.Hidden;
                 }
             }
 

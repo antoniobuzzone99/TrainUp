@@ -20,10 +20,10 @@
         <Label Content="Weight" HorizontalAlignment="Center" VerticalAlignment="Top" Width="252" Margin="0,316,0,0"/>
         <Label Content="Register" Foreground="DarkOliveGreen" FontSize="25" FontFamily="Georgia" HorizontalAlignment="Center" Margin="0,58,0,0" VerticalAlignment="Top" />
         <Button Content="Login" BorderBrush="Black" Background="DarkOliveGreen" Foreground="White" HorizontalAlignment="Center" Margin="0,415,0,0" VerticalAlignment="Top"  Click="LoginButton_Click" Height="24" Width="246"/>
-        <Label x:Name="outputLabel"  Foreground="Red" Content="Password diverse" HorizontalAlignment="Center" Margin="0,440,0,0" VerticalAlignment="Top" Width="254"/>
+        <Label x:Name="outputLabel" Visibility="Hidden" Foreground="Red" Content="Password diverse" HorizontalAlignment="Center" Margin="0,440,0,0" VerticalAlignment="Top" Width="254"/>
         <PasswordBox x:Name="PasswordBox" HorizontalAlignment="Center" Margin="0,183,0,0" VerticalAlignment="Top" Width="248" Height="25"/>
         <PasswordBox x:Name="ConfirmPasswordBox" HorizontalAlignment="Center" Margin="0,238,0,0" VerticalAlignment="Top" Width="246" Height="25"/>
-        <Label x:Name="outputLabel2"  Foreground="Red" Content="Compilare tutti i campi" HorizontalAlignment="Center" Margin="0,461,0,0" VerticalAlignment="Top" Width="256"/>
+        <Label x:Name="outputLabel2" Visibility="Hidden" Foreground="Red" Content="Compilare tutti i campi" HorizontalAlignment="Center" Margin="0,461,0,0" VerticalAlignment="Top" Width="256"/>
 
     </Grid>
 </Page>
