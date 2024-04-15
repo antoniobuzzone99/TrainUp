@@ -19,40 +19,39 @@ namespace TrainUp_Client
     /// <summary>
     /// Logica di interazione per Page2.xaml
     /// </summary>
+    /// pagina stampa schede da evento dalla home
     public partial class Page2 : Page
     {
-        private readonly HttpClientService _httpClientService;
-        public Page2(HttpClientService httpClientService, UserCard trainingCard)
+        private readonly string token;
+        public Page2(string token, UserCard trainingCard)
         {
             
             InitializeComponent();
-            _httpClientService = httpClientService;
-            string currentDay = null;
-            foreach (var exercise in trainingCard.Exercises)
+            this.token = token;
+
+            // Raggruppa gli esercizi per giorno
+            var groupedExercises = trainingCard.Exercises.GroupBy(e => e.Day);
+
+            // Itera attraverso i gruppi e stampa gli esercizi
+            foreach (var group in groupedExercises)
             {
-                if (exercise.Day != currentDay)
+                Label labelday = new Label();
+                labelday.Content = $"Day: {group.Key}";
+                labelday.FontSize = 14;
+                labelday.FontWeight = FontWeights.Bold;
+                labelday.FontFamily = new FontFamily("Georgia");
+                cardPanel.Children.Add(labelday);
+                foreach (var exercise in group)
                 {
-                    // Se il giorno è diverso da quello attuale, crea un nuovo label per il giorno
-                    currentDay = exercise.Day;
-
-                    Label labelDay = new Label();
-                    labelDay.Content = currentDay;
-                    labelDay.FontSize = 14;
-                    labelDay.FontWeight = FontWeights.Bold;
-                    labelDay.FontFamily = new FontFamily("Georgia");
-                    cardPanel.Children.Add(labelDay);
-
+                    Label labelExercise = new Label();
+                    labelExercise.Content = $"Name: {exercise.Name} - Set: {exercise.Sets} Rep: {exercise.Reps}";
+                    cardPanel.Children.Add(labelExercise);
+                    labelExercise.Margin = new Thickness(0, 0, 0, -5);
                 }
-
-                // Crea un label per l'esercizio
-                Label labelExercise = new Label();
-                labelExercise.Content = labelExercise.Content = $"{exercise.Name} - Set: {exercise.Sets} Rep: {exercise.Reps}";
-                cardPanel.Children.Add(labelExercise);
-                labelExercise.Margin = new Thickness(0, 0, 0, -5);
             }
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void HomeButton_Click(object sender, RoutedEventArgs e)
         {
             if (Application.Current.MainWindow is MainWindow mainWindow && mainWindow.MainFrame != null)
             {
@@ -60,7 +59,7 @@ namespace TrainUp_Client
                 if (Application.Current.MainWindow is MainWindow && mainWindow.MainFrame != null)
                 {
                     // Naviga verso una nuova pagina
-                    mainWindow.MainFrame.NavigationService.Navigate(new Page1(_httpClientService));
+                    mainWindow.MainFrame.NavigationService.Navigate(new Page1(token));
                 }
             }
         }

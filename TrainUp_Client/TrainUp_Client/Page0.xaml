@@ -5,17 +5,17 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:WpfApp1"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="630" d:DesignWidth="500"
       Title="Page0">
 
     <Grid>
-        <Button x:Name="SubmitButton" Content="Submit" HorizontalAlignment="Left" Margin="265,296,0,0" VerticalAlignment="Top" Width="57" Click="SubmitButton_Click"/>
-        <TextBox x:Name="UsernameBox" HorizontalAlignment="Left" Height="25" Margin="265,184,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="247"/>
-        <Label Content="Username" HorizontalAlignment="Left" Margin="265,158,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.505,-0.242"/>
-        <Label Content="Password" HorizontalAlignment="Left" Margin="265,208,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.505,-0.242"/>
-        <Label x:Name="outputLabel" Visibility="Hidden" Foreground="Red"  Content="username e/o password errati" HorizontalAlignment="Left" Height="27" Margin="265,264,0,0" VerticalAlignment="Top" Width="247"/>
-        <Button x:Name="RegisterButton" Content="Register" HorizontalAlignment="Left" Margin="456,296,0,0" VerticalAlignment="Top" Width="56" Click="RegisterButton_Click"/>
-        <Label Content="Login" FontSize="35" FontFamily="Georgia" HorizontalAlignment="Center" Margin="0,78,0,0" VerticalAlignment="Top" Width="107"/>
-        <PasswordBox x:Name="PasswordBox" HorizontalAlignment="Left" Margin="265,239,0,0" VerticalAlignment="Top" Width="247" Height="25"/>
+        <Button x:Name="SubmitButton" BorderBrush="Black" Background="DarkOliveGreen" Foreground="White" Content="Submit" HorizontalAlignment="Center" VerticalAlignment="Top" Width="246" Click="SubmitButton_Click" RenderTransformOrigin="-2.088,0.495" Height="24" Margin="0,330,0,0"/>
+        <TextBox x:Name="UsernameBox" HorizontalAlignment="Center" Height="25" Margin="0,221,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="246"/>
+        <Label Content="Username" HorizontalAlignment="Center" Margin="0,195,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.505,-0.242" Width="256"/>
+        <Label Content="Password" HorizontalAlignment="Center" Margin="0,247,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.505,-0.242" Width="256"/>
+        <Button x:Name="RegisterButton"  BorderBrush="Black" Background="DarkOliveGreen" Foreground="White" Content="Register" HorizontalAlignment="Center" VerticalAlignment="Top" Width="246" Click="RegisterButton_Click" RenderTransformOrigin="1.603,0.746" Margin="0,365,0,0" Height="24"/>
+        <PasswordBox x:Name="PasswordBox" HorizontalAlignment="Center" Margin="0,275,0,0" VerticalAlignment="Top" Width="246" Height="25"/>
+        <Label x:Name="outputLabel"  Foreground="Red" Content="username e/o password errati" HorizontalAlignment="Left" VerticalAlignment="Top" Width="252" Margin="121,300,0,0"/>
+        <Image Source="C:\Users\abuzz\OneDrive\Desktop\Elab_APL\image\esercizio.png" Width="120" Height="120" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,66,0,0"/>
     </Grid>
 </Page>

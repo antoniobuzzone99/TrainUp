@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Reflection.Metadata;
 using System.Text;
-//using System.Text.Json;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -15,101 +14,58 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-
 using System.Windows.Shapes;
+using WpfApp1;
+
 using TrainUp_Client;
 
-using Newtonsoft.Json;
+
 using System.Diagnostics;
+using System.Text.Json.Serialization;
+using System.ComponentModel;
+
 
 namespace WpfApp1
 {
     /// <summary>
     /// Logica di interazione per Page1.xaml
     /// </summary>
+    /// HOME
     public partial class Page1 : Page
     {
-        private readonly HttpClientService _httpClientService;
-        public Page1(HttpClientService httpClientService)
+        private readonly string token;
+
+        public Page1(string token)
         {
-            _httpClientService = httpClientService;
-            Debug.WriteLine($"page 1:HttpClient instance created: {_httpClientService.Client != null}");
             InitializeComponent();
+            this.token = token;
             LoadDataFromServer();
-            
+            LoadCardFromDb();
         }
-        private async void LoadDataFromServer()
-        {
-            Debug.WriteLine($"page 1bis:HttpClient instance created: {_httpClientService.Client != null}");
-            using (HttpClient client = _httpClientService.Client)
-            {
-                Debug.WriteLine($"page 2bis:HttpClient instance created: {_httpClientService.Client != null}");
-
-                string url = "http://localhost:5000/home"; 
-
-      
-                var content = new StringContent(System.Text.Json.JsonSerializer.Serialize("date"), Encoding.UTF8, "application/json");
-                HttpResponseMessage response = await client.PostAsync(url, content);
-                string jsonString = await response.Content.ReadAsStringAsync();
-
-                JsonResponse jsonResponse = JsonConvert.DeserializeObject<JsonResponse>(jsonString);
-                var trainingCards = jsonResponse.UserCards;
-
-
-                foreach (UserCard trainingCard in trainingCards){
-                    // Verifica se un bottone con lo stesso CardId esiste già nel cardPanel
-                    bool buttonExists = cardPanel.Children.OfType<Button>().Any(b => b.Name.Equals("bottone_" + trainingCard.CardId.ToString()));
-                    if (!buttonExists) {
-                        Button button = new Button();
-                        button.Name = "bottone_"+trainingCard.CardId.ToString();
-                        button.Content = "Scheda "+trainingCard.CardId;
-                        button.BorderBrush = new SolidColorBrush(Colors.DarkBlue);
-                        button.FontSize = 15;
-                        button.Width = 200;
-                        button.Height = 40;
-                        button.FontFamily = new FontFamily("Georgia");
-                        button.Margin = new Thickness(0,0,0,10);
-                        cardPanel.Children.Add(button);
-             
-                        // Aggiunta del gestore dell'evento senza chiamarlo direttamente
-                        button.Click += (sender, e) => CardButtonClick(sender, e, trainingCard);
-
-                    }
-                   
-                }
-
-            }
-        }
-
-        private async void CardButtonClick(object sender, RoutedEventArgs e, UserCard trainingCard)
-        {
-
-            if (Application.Current.MainWindow is MainWindow mainWindow && mainWindow.MainFrame != null)
-            {
-                // Accedi al NavigationService del Frame dalla finestra principale
-                if (Application.Current.MainWindow is MainWindow && mainWindow.MainFrame != null)
-                {
-                    // Naviga verso una nuova pagina
-                    mainWindow.MainFrame.NavigationService.Navigate(new Page2(_httpClientService, trainingCard));
-                }
-            }
-        }
+        
 
         private async void LogoutButton_Click(object sender, RoutedEventArgs e)
         {
-            using (HttpClient client = _httpClientService.Client)
+            using (HttpClient client = new HttpClient())
             {
                 string url = $"http://localhost:5000/logout";
+                var data = new{token};
+
+                // Converti i dati in formato JSON
+                string jsonData = JsonSerializer.Serialize(data);
+
+                // Crea un oggetto StringContent con il JSON
+                StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+
                 // Esegui la richiesta HTTP POST
-                HttpResponseMessage response = await client.PostAsync(url, null);
+                HttpResponseMessage response = await client.PostAsync(url, content);
 
                 // Leggi la risposta come stringa
                 string responseString = await response.Content.ReadAsStringAsync();
 
 
                 // Controlla la risposta JSON per il successo
-                //var responseObject = JsonSerializer.Deserialize<Dictionary<string, int>>(responseString);
-                var responseObject = JsonConvert.DeserializeObject<Dictionary<string, int>>(responseString);
+                var responseObject = JsonSerializer.Deserialize<Dictionary<string, int>>(responseString);
                 int state = (int)responseObject["state"];
                 
 
@@ -122,7 +78,7 @@ namespace WpfApp1
                         if (Application.Current.MainWindow is MainWindow && mainWindow.MainFrame != null)
                         {
                             // Naviga verso una nuova pagina
-                            mainWindow.MainFrame.NavigationService.Navigate(new Page0(_httpClientService));
+                            mainWindow.MainFrame.NavigationService.Navigate(new Page0());
                         }
                     }
                 }
@@ -130,9 +86,41 @@ namespace WpfApp1
 
         }
 
+        private async void New_card_ClickAsync(object sender, RoutedEventArgs e) {
+            //inizializzo la scheda
+            using (HttpClient client = new HttpClient())
+            {
+                string url = $"http://localhost:5000/card_inizialize";
+                var data = new { token };
+
+                var content = new StringContent(JsonSerializer.Serialize(data), Encoding.UTF8, "application/json");
+                HttpResponseMessage response = await client.PostAsync(url, content);
+                string jsonString = await response.Content.ReadAsStringAsync();
+
+                JsonResponse jsonResponse = JsonSerializer.Deserialize<JsonResponse>(jsonString);
+                var trainingCards = jsonResponse.UserCards;
+
+
+                //creo una nuova scheda passo come parametro alla pagina per aggiungere esercizi prendedno l'ultima elemento della lista ovvero l'ultima scheda creata
+                UserCard NewUserCard = trainingCards[trainingCards.Count - 1];
+                NewUserCard.Exercises = new List<Exercise>();
+
+                if (Application.Current.MainWindow is MainWindow mainWindow && mainWindow.MainFrame != null)
+                {
+                    // Accedi al NavigationService del Frame dalla finestra principale
+                    if (Application.Current.MainWindow is MainWindow && mainWindow.MainFrame != null)
+                    {
+                        // Naviga verso una nuova pagina
+                        mainWindow.MainFrame.NavigationService.Navigate(new creaScheda(token, NewUserCard));
+                    }
+                }
+                
+            }
+        }
+
         private void Setting_Click(object sender, RoutedEventArgs e)
         {
-            //funzione aggirona dati
+            //FUNZIONE AGGIORNA DATI
 
             if (Application.Current.MainWindow is MainWindow mainWindow && mainWindow.MainFrame != null)
             {
@@ -140,44 +128,186 @@ namespace WpfApp1
                 if (Application.Current.MainWindow is MainWindow && mainWindow.MainFrame != null)
                 {
                     // Naviga verso una nuova pagina
-                    mainWindow.MainFrame.NavigationService.Navigate(new Page4(_httpClientService));
+                    mainWindow.MainFrame.NavigationService.Navigate(new Page4(token));
                 }
             }
         }
 
+        private void Exercise_ButtonClick(object sender, RoutedEventArgs e)
+        {
+            //stampa gli esercizi della scheda
+
+            if (Application.Current.MainWindow is MainWindow mainWindow && mainWindow.MainFrame != null)
+            {
+                // Accedi al NavigationService del Frame dalla finestra principale
+                if (Application.Current.MainWindow is MainWindow && mainWindow.MainFrame != null)
+                {
+                    // Naviga verso una nuova pagina
+                    mainWindow.MainFrame.NavigationService.Navigate(new Page5(token));
+                }
+            }
+        }
+
+
+        //###########################################################
+        //caricamento schde statiche
+        private async void LoadDataFromServer()
+        {
+            //FUNZIONE CHE STAMPA LE SCHEDE DI DEFAULT
+            using (HttpClient client = new HttpClient())
+            {
+
+                string url = "http://localhost:5000/home";
+
+
+                var content = new StringContent(JsonSerializer.Serialize("date"), Encoding.UTF8, "application/json");
+                HttpResponseMessage response = await client.PostAsync(url, content);
+                string jsonString = await response.Content.ReadAsStringAsync();
+
+                JsonResponse jsonResponse = JsonSerializer.Deserialize<JsonResponse>(jsonString);
+                var trainingCards = jsonResponse.UserCards;
+
+
+                foreach (UserCard trainingCard in trainingCards)
+                {
+                    cardPanel.HorizontalAlignment = HorizontalAlignment.Left;
+                    // Verifica se un bottone con lo stesso CardId esiste già nel cardPanel
+                    bool buttonExists = cardPanel.Children.OfType<Button>().Any(b => b.Name.Equals("bottone_" + trainingCard.CardId.ToString()));
+                    if (!buttonExists)
+                    {
+                        Button button = new Button();
+                        button.Name = "bottone_" + trainingCard.CardId.ToString();
+                        button.Content = "Scheda " + trainingCard.CardId;
+                        button.BorderBrush = new SolidColorBrush(Colors.DarkOliveGreen);
+                        button.BorderThickness = new Thickness(1.5);
+                        button.Background = new SolidColorBrush(Colors.WhiteSmoke);
+                        button.FontSize = 13;
+                        button.Width = cardPanel.ActualWidth;
+                        button.Height = 30;
+                        button.FontFamily = new FontFamily("Georgia");
+                        button.Margin = new Thickness(0, 0, 0, 10);
+                        cardPanel.Children.Add(button);
+
+                        // Aggiunta del gestore dell'evento senza chiamarlo direttamente
+                        button.Click += (sender, e) => CardButtonClick(sender, e, trainingCard);
+
+                    }
+
+                }
+
+            }
+        }
+
+        private async void CardButtonClick(object sender, RoutedEventArgs e, UserCard trainingCard)
+        {
+            //stampa gli esercizi della scheda
+
+            if (Application.Current.MainWindow is MainWindow mainWindow && mainWindow.MainFrame != null)
+            {
+                // Accedi al NavigationService del Frame dalla finestra principale
+                if (Application.Current.MainWindow is MainWindow && mainWindow.MainFrame != null)
+                {
+                    // Naviga verso una nuova pagina
+                    mainWindow.MainFrame.NavigationService.Navigate(new Page2(token, trainingCard));
+                }
+            }
+        }
+
+        //#######################################################
+        //caricamento schde create dall'utente
+        private async void LoadCardFromDb()
+        {
+            //FUNZIONE CHE STAMPA LE SCHEDE CREATE DAGLI UTENTI
+            using (HttpClient client = new HttpClient())
+            {
+
+                string url = "http://localhost:5000/LoadCardFromDb";
+
+                var content = new StringContent(JsonSerializer.Serialize("data"), Encoding.UTF8, "application/json");
+                HttpResponseMessage response = await client.PostAsync(url, content);
+                string jsonString = await response.Content.ReadAsStringAsync();
+
+                JsonResponse jsonResponse = JsonSerializer.Deserialize<JsonResponse>(jsonString);
+                var trainingCards = jsonResponse.UserCards;
+
+
+                
+                foreach (var card in trainingCards)
+                {
+                   
+                    bool buttonExists = CardPanel2.Children.OfType<Button>().Any(b => b.Name.Equals("bottone_" + card.CardId.ToString()));
+                    if (!buttonExists)
+                    {
+                        Button button = new Button();
+                        button.Name = "bottone_" + card.CardId.ToString();
+                        button.Content = "Scheda " + card.CardId + "  Utente:" +card.UserId;
+                        button.BorderBrush = new SolidColorBrush(Colors.DarkOliveGreen);
+                        button.BorderThickness = new Thickness(1.5);
+                        button.Background = new SolidColorBrush(Colors.WhiteSmoke);
+                        button.FontSize = 12;
+                        button.Width = cardPanel.ActualWidth -200;
+                        button.Height = 30;
+                        button.FontFamily = new FontFamily("Georgia");
+                        button.Margin = new Thickness(0, 0, 0, 10);
+                        CardPanel2.Children.Add(button);
+
+                        // Aggiunta del gestore dell'evento senza chiamarlo direttamente
+                        button.Click += (sender, e) => UserCardButtonClick(sender, e, card);
+
+                    }
+                }
+
+            }
+        }
+
+        private async void UserCardButtonClick(object sender, RoutedEventArgs e, UserCard trainingCard)
+        {
+            //stampa gli esercizi della scheda
+
+            if (Application.Current.MainWindow is MainWindow mainWindow && mainWindow.MainFrame != null)
+            {
+                // Accedi al NavigationService del Frame dalla finestra principale
+                if (Application.Current.MainWindow is MainWindow && mainWindow.MainFrame != null)
+                {
+                    // Naviga verso una nuova pagina
+                    mainWindow.MainFrame.NavigationService.Navigate(new stampaUserCard(token, trainingCard));
+                }
+            }
+        }
     }
 
    
+    
     public class JsonResponse
     {
-        [JsonProperty("user_cards")]
+        [JsonPropertyName("user_cards")]
         public List<UserCard> UserCards { get; set; }
     }
 
     public class UserCard
     {
-        [JsonProperty("card_id")]
+        [JsonPropertyName("card_id")]
         public int CardId { get; set; }
 
-        [JsonProperty("exercises")]
+        [JsonPropertyName("exercises")]
         public List<Exercise> Exercises { get; set; }
 
-        [JsonProperty("user_id")]
+        [JsonPropertyName("user_id")]
         public int UserId { get; set; }
     }
 
     public class Exercise
     {
-        [JsonProperty("day")]
+        [JsonPropertyName("day")]
         public string Day { get; set; }
 
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; set; }
 
-        [JsonProperty("reps")]
+        [JsonPropertyName("reps")]
         public int Reps { get; set; }
 
-        [JsonProperty("sets")]
+        [JsonPropertyName("sets")]
         public int Sets { get; set; }
     }
 

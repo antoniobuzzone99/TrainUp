@@ -1,11 +1,10 @@
-from flask import request, jsonify, Flask
-from home import home_card_displayer
-from models.user import User, db
-from auth import user_login, user_register, user_logout, update_data
-from flask_login import LoginManager, current_user
-import os
+from flask import request, Flask
+from home import home_card_displayer, Load_exercise, LoadCardFromDb
+from NewCard import New_card, add_exercise, confirm_creation_card, remove_from_list, delete_trainingCard
+from models.user import db
+from auth import user_login, user_register, user_logout, update_data, update_password
 
-SECRET_KEY = os.urandom(32)
+SECRET_KEY = "mysecretkey"
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = SECRET_KEY
@@ -13,19 +12,11 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:12345@localhost:3309/Train
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SESSION_TYPE'] = 'filesystem'
 db.init_app(app)
-login_manager = LoginManager(app)
-login_manager.login_view = "login"
-
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
     data = request.get_json()
-    value = user_login(data)
-    print(current_user.id)
-    return value
+    return user_login(data)
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
@@ -35,18 +26,54 @@ def register():
 
 @app.route("/logout", methods=['GET', 'POST'])
 def logout():
-    return user_logout()
+    data = request.get_json()
+    return user_logout(data)
 
 @app.route("/home", methods=['GET', 'POST'])
 def home():
-    data = request.get_json()
     return home_card_displayer()
+@app.route("/loadExer", methods=['GET', 'POST'])
+def loadExer():
+    return Load_exercise()
 
 @app.route("/update_data", methods=['GET', 'POST'])
 def update():
     data = request.get_json()
     return update_data(data)
 
+@app.route("/update_password", methods=['GET', 'POST'])
+def updatePass():
+    data = request.get_json()
+    return update_password(data)
+
+@app.route("/card_inizialize", methods=['GET', 'POST'])
+def newCard():
+    data = request.get_json()
+    return New_card(data)
+
+@app.route("/add_exe_card", methods=['GET', 'POST'])
+def addExe():
+    data = request.get_json()
+    return add_exercise(data)
+
+@app.route("/confirm_creation_card", methods=['GET', 'POST'])
+def confrim():
+    data = request.get_json()
+    return confirm_creation_card(data)
+
+@app.route("/remove_from_list", methods=['GET', 'POST'])
+def removeFromList():
+    data = request.get_json()
+    return remove_from_list(data)
+
+@app.route("/LoadCardFromDb", methods=['GET', 'POST'])
+def LoadCard():
+    return LoadCardFromDb()
+
+@app.route("/delete_trainingCard", methods=['GET', 'POST'])
+def delete():
+    data = request.get_json()
+    return delete_trainingCard(data)
 @app.before_request
 def init_db():
     with app.app_context():

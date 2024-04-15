@@ -5,16 +5,24 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:TrainUp_Client"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="630" d:DesignWidth="500"
       Title="Page2">
 
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="789*"/>
-            <ColumnDefinition Width="11*"/>
-        </Grid.ColumnDefinitions>
-        <StackPanel Name="cardPanel" Margin="144,45,133,65"/>
-        <Button Content="Home" HorizontalAlignment="Left" Margin="683,10,0,0" VerticalAlignment="Top" Width="75" Height="23" Click="Button_Click"/>
+        <!-- Barra degli strumenti -->
+        <Grid Height="60" Background="DarkOliveGreen" VerticalAlignment="Bottom">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button  Margin="5,5,5,5" Click="HomeButton_Click" Background="Transparent" BorderBrush="Transparent">
+                    <Image Source="C:\Users\abuzz\OneDrive\Desktop\Elab_APL\image\icona0.png" Width="35" Height="30"/>
+                </Button>
+
+                <!-- Aggiungi altri pulsanti come necessario -->
+            </StackPanel>
+        </Grid>
+
+
+        <StackPanel Name="cardPanel" Margin="34,32,49,120"/>
+    
 
     </Grid>
 </Page>

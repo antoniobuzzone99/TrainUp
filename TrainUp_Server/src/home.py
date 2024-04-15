@@ -1,8 +1,12 @@
 from flask import jsonify
 from FitnessApp import FitnessApp
+from models.user import Exercise, db, TrainingCard_, ExercisesCards_
+
+SECRET_KEY = "mysecretkey"
+fitness_app_singleton = FitnessApp()
 
 def home_card_displayer():
-    fitness_app_singleton = FitnessApp()
+    #caricamento schede statiche
     user_cards = fitness_app_singleton.get_user_training_cards(user_id=1)
 
     # Controllare se ci sono già elementi con id 1 e 2 nelle schede esistenti
@@ -63,6 +67,59 @@ def home_card_displayer():
         fitness_app_singleton.add_exercise_to_card(new_card2.card_id, "Alzate laterali", sets=4, reps=12, day="Friday")
 
     updated_user_cards = fitness_app_singleton.get_user_training_cards(user_id=1)
-
     return jsonify({'user_cards': updated_user_cards})
 
+
+def Load_exercise():
+    #caricicamento esercizi
+    exercise_list = []
+    new_exercises = Exercise.query.all()
+    for exercise in new_exercises:
+        exercise_dict = {
+            'name': exercise.name,
+            'muscle_group': exercise.muscle_group
+        }
+        exercise_list.append(exercise_dict)
+    return jsonify({'exercise_list': exercise_list})
+
+def LoadCardFromDb():
+    #caricicamento schede
+    # Eseguire una query con un join tra le tabelle TrainingCard_ e ExercisesCards_
+    query_result = db.session.query(
+        TrainingCard_.id,
+        TrainingCard_.user_id,
+        ExercisesCards_.name.label('exercise_name'),
+        ExercisesCards_.sets,
+        ExercisesCards_.reps,
+        ExercisesCards_.day
+    ).join(
+        ExercisesCards_,
+        TrainingCard_.id == ExercisesCards_.id_train_card
+    ).all()
+
+    # Creare un dizionario per memorizzare i risultati
+    training_cards_dict = {}
+
+    # Elaborare i risultati della query
+    for row in query_result:
+        card_id = row.id
+        user_id = row.user_id
+        exercise = {
+            'name': row.exercise_name,
+            'sets': row.sets,
+            'reps': row.reps,
+            'day': row.day
+        }
+
+        # Aggiungere le informazioni alla lista di esercizi per questa carta
+        if (card_id, user_id) not in training_cards_dict:
+            training_cards_dict[(card_id, user_id)] = {
+                'card_id': card_id,
+                'user_id': user_id,
+                'exercises': []
+            }
+        training_cards_dict[(card_id, user_id)]['exercises'].append(exercise)
+
+    # Convertire il dizionario in una lista
+    training_cards_list = list(training_cards_dict.values())
+    return jsonify({'user_cards': training_cards_list})

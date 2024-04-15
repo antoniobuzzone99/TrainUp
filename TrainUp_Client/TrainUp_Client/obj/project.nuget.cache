@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "rnGMO2V+KPE2mGMYubvi9pkYkZz7xRISNUKaWuB7r3gkUnxvSA1GqHxJ5K9Q/3oIhJ3KuibO3g10YaxW/8eE+A==",
+  "dgSpecHash": "QbcauMgFSX8F1TsKrZIa52eCrf8LWun/CZfnN0JUFX2Ab0x2pWoCUOx4lwqaT9LpTRJsMvh+1oK+ZrZmkSCj0Q==",
   "success": true,
-  "projectFilePath": "C:\\Users\\abuzz\\OneDrive\\Desktop\\TrainUp\\TrainUp_Client\\TrainUp_Client\\TrainUp_Client.csproj",
+  "projectFilePath": "C:\\Users\\abuzz\\OneDrive\\Desktop\\Elab_APL\\TrainUp_Client\\TrainUp_Client\\TrainUp_Client.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\abuzz\\.nuget\\packages\\microsoft.extensions.dependencyinjection\\8.0.0\\microsoft.extensions.dependencyinjection.8.0.0.nupkg.sha512",
     "C:\\Users\\abuzz\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\8.0.0\\microsoft.extensions.dependencyinjection.abstractions.8.0.0.nupkg.sha512",

@@ -9,8 +9,11 @@ class FitnessApp:
 
         return cls._instance
 
-    def create_training_card(self, user_id):
-        card_id = len(self.training_cards) + 1
+    def create_training_card(self, user_id, card_id=None):
+        #se non passo nessun id allora incremeneta dalla lunghezza di training_cards
+        #altrimenti prende l'id passato come parametro per recuperare l'ultimo dal db
+        if card_id is None:
+            card_id = len(self.training_cards) + 1
         new_card = TrainingCard(card_id, user_id)
         self.training_cards.append(new_card)
         return new_card

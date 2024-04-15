@@ -21,13 +21,12 @@ namespace WpfApp1
     /// <summary>
     /// Logica di interazione per Page3.xaml
     /// </summary>
+    /// register
     public partial class Page3 : Page
     {
-        private readonly HttpClientService _httpClientService;
-        public Page3(HttpClientService httpClientService)
+        public Page3()
         {
             InitializeComponent();
-            _httpClientService = httpClientService;
         }
 
         private async void LoginButton_Click(object sender, RoutedEventArgs e)
@@ -39,7 +38,7 @@ namespace WpfApp1
                 if (Application.Current.MainWindow is MainWindow && mainWindow.MainFrame != null)
                 {
                     // Naviga verso una nuova pagina
-                    mainWindow.MainFrame.NavigationService.Navigate(new Page0(_httpClientService));
+                    mainWindow.MainFrame.NavigationService.Navigate(new Page0());
                 }
             }
         }
@@ -71,11 +70,14 @@ namespace WpfApp1
                 string responseString = await response.Content.ReadAsStringAsync();
 
                 // Controlla la risposta JSON per il successo
-                var responseObject = JsonSerializer.Deserialize<Dictionary<string, int>>(responseString);
-                int state = (int)responseObject["state"];
+                var responseObject = JsonSerializer.Deserialize<Dictionary<string, string>>(responseString);
+                string state = responseObject["state"];
+                string token = responseObject["token"];
 
-
-                if (state == 0)
+                string success = "success";
+                string fault1 = "fault1";
+                string fault2 = "fault2";
+                if (state == success)
                 {
                     // Accedi al NavigationService del Frame dalla finestra principale
                     if (Application.Current.MainWindow is MainWindow mainWindow && mainWindow.MainFrame != null)
@@ -84,15 +86,15 @@ namespace WpfApp1
                         if (Application.Current.MainWindow is MainWindow && mainWindow.MainFrame != null)
                         {
                             // Naviga verso una nuova pagina
-                            mainWindow.MainFrame.NavigationService.Navigate(new Page1(_httpClientService));
+                            mainWindow.MainFrame.NavigationService.Navigate(new Page1(token));
                         }
                     }
                 }
-                else if (state == 2)
+                else if (state == fault2)
                 {
                     outputLabel.Visibility = Visibility.Visible;
                 }
-                else {
+                else if (state == fault1){
                     outputLabel2.Visibility = Visibility.Visible;
                 }
             }

@@ -5,18 +5,47 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:WpfApp1"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="630" d:DesignWidth="500"
       Title="Page1">
 
     <Grid>
-        <StackPanel Name="cardPanel" Margin="202,58,122,179">
+        <Label Content="Programmi" Foreground="DarkOliveGreen" FontFamily="Georgia" FontSize="26" HorizontalAlignment="Left" Margin="23,10,0,0" VerticalAlignment="Top" Width="185"/>
+        <Label Content="Programmi creati dagli utenti" Foreground="DarkOliveGreen" FontFamily="Georgia" FontSize="16" HorizontalAlignment="Left" Margin="23,205,0,0" VerticalAlignment="Top" Width="234"/>
+
+        <!-- Barra degli strumenti -->
+        <Grid Height="60" Background="DarkOliveGreen" VerticalAlignment="Bottom">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button  Margin="5,5,25,5" Click="New_card_ClickAsync" Background="Transparent" BorderBrush="Transparent">
+                    <Image Source="C:\Users\abuzz\OneDrive\Desktop\Elab_APL\image\icona1.png" Width="35" Height="30"/>
+                </Button>
+                <Button  Margin="5,5,25,5" Click="Exercise_ButtonClick" Background="Transparent" BorderBrush="Transparent">
+                    <Image Source="C:\Users\abuzz\OneDrive\Desktop\Elab_APL\image\icona2.png" Width="35" Height="30"/>
+                </Button>
+                <Button  Margin="5,5,25,5" Background="Transparent" BorderBrush="Transparent">
+                    <Image Source="C:\Users\abuzz\OneDrive\Desktop\Elab_APL\image\icona3.png" Width="35" Height="30"/>
+                </Button>
+                <Button  Margin="5,5,25,5" Click="Setting_Click" Background="Transparent" BorderBrush="Transparent">
+                    <Image Source="C:\Users\abuzz\OneDrive\Desktop\Elab_APL\image\icona4.png" Width="35" Height="30"/>
+                </Button>
+                <Button  Margin="5,5,0,5" Click="LogoutButton_Click" Background="Transparent" BorderBrush="Transparent">
+                    <Image Source="C:\Users\abuzz\OneDrive\Desktop\Elab_APL\image\icona5.png" Width="35" Height="30"/>
+                </Button>
+            </StackPanel>
+        </Grid>
+
+        <StackPanel Name="cardPanel" Margin="42,58,44,425">
 
         </StackPanel>
-        <Button x:Name="Logout" BorderThickness="0" Content="Logout" HorizontalAlignment="Left" Margin="25,173,0,0" VerticalAlignment="Top" Width="130" Click="LogoutButton_Click" Height="26" RenderTransformOrigin="-6.619,3.283"/>
-        <Label Content="TrainUp Home" FontFamily="Georgia" FontSize="24" HorizontalAlignment="Left" Margin="18,8,0,0" VerticalAlignment="Top" Width="174"/>
-        <Label x:Name="labelerror" Content="" HorizontalAlignment="Left" Margin="0,365,0,0" VerticalAlignment="Top" Width="790" Height="75"/>
-        <Button x:Name="Setting" BorderThickness="0" Content="Aggiorna i tuoi dati" HorizontalAlignment="Left" Margin="25,87,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.084,-0.084" Width="130" Height="26" Click="Setting_Click"/>
-        <Button x:Name="Setting2" BorderThickness="0" Content="Definisci i tuoi obiettivi" HorizontalAlignment="Left" Margin="25,130,0,0" VerticalAlignment="Top" Width="130" Height="26"/>
-        <Button x:Name="Setting1" BorderThickness="0" Content="Crea la tua scheda" HorizontalAlignment="Left" Margin="25,46,0,0" VerticalAlignment="Top" Width="130" Height="26"/>
+
+        <Rectangle Fill="DarkOliveGreen" Height="4" VerticalAlignment="Top" Margin="32,191,325,0"/>
+
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="23,246,44,60">
+            <StackPanel Name="CardPanel2" Margin="37,19,40,94" Width="386" Height="354">
+                <!-- Inserisci qui i tuoi elementi da visualizzare 
+                        
+-->
+            </StackPanel>
+        </ScrollViewer>
+
     </Grid>
 </Page>
