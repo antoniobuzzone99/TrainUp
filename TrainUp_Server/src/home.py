@@ -1,12 +1,16 @@
+import logging
+from pipes import quote
+import jwt
 from flask import jsonify
 from FitnessApp import FitnessApp
-from models.user import Exercise, db, TrainingCard_, ExercisesCards_
+from models.user import Exercise, db, TrainingCard_, ExercisesCards_, cardsFavoreites
 
 SECRET_KEY = "mysecretkey"
 fitness_app_singleton = FitnessApp()
 
+
 def home_card_displayer():
-    #caricamento schede statiche
+    # caricamento schede statiche
     user_cards = fitness_app_singleton.get_user_training_cards(user_id=1)
 
     # Controllare se ci sono già elementi con id 1 e 2 nelle schede esistenti
@@ -22,9 +26,11 @@ def home_card_displayer():
         fitness_app_singleton.add_exercise_to_card(new_card.card_id, "Calf machine", sets=4, reps=20, day="Monday")
         fitness_app_singleton.add_exercise_to_card(new_card.card_id, "Panca piana", sets=5, reps=5, day="Wednesday")
         fitness_app_singleton.add_exercise_to_card(new_card.card_id, "Military-Press", sets=6, reps=6, day="Wednesday")
-        fitness_app_singleton.add_exercise_to_card(new_card.card_id, "spinte panca inclinata", sets=4, reps=8, day="Wednesday")
+        fitness_app_singleton.add_exercise_to_card(new_card.card_id, "spinte panca inclinata", sets=4, reps=8,
+                                                   day="Wednesday")
         fitness_app_singleton.add_exercise_to_card(new_card.card_id, "Push-down", sets=4, reps=8, day="Wednesday")
-        fitness_app_singleton.add_exercise_to_card(new_card.card_id, "Alzate laterali", sets=4, reps=12, day="Wednesday")
+        fitness_app_singleton.add_exercise_to_card(new_card.card_id, "Alzate laterali", sets=4, reps=12,
+                                                   day="Wednesday")
         fitness_app_singleton.add_exercise_to_card(new_card.card_id, "Stacco da terra", sets=5, reps=3, day="Friday")
         fitness_app_singleton.add_exercise_to_card(new_card.card_id, "Trazioni", sets=5, reps=3, day="Friday")
         fitness_app_singleton.add_exercise_to_card(new_card.card_id, "Lat-machine", sets=4, reps=5, day="Friday")
@@ -36,32 +42,41 @@ def home_card_displayer():
         fitness_app_singleton.add_exercise_to_card(new_card1.card_id, "Lento dietro", sets=4, reps=6, day="Monday")
         fitness_app_singleton.add_exercise_to_card(new_card1.card_id, "Lat Machine", sets=4, reps=5, day="Monday")
         fitness_app_singleton.add_exercise_to_card(new_card1.card_id, "Pulley basso", sets=4, reps=6, day="Monday")
-        fitness_app_singleton.add_exercise_to_card(new_card1.card_id, "Spinte avanti con corda", sets=4, reps=8, day="Monday")
-        fitness_app_singleton.add_exercise_to_card(new_card1.card_id, "Stacco da terra", sets=5, reps=3, day="Wednesday")
+        fitness_app_singleton.add_exercise_to_card(new_card1.card_id, "Spinte avanti con corda", sets=4, reps=8,
+                                                   day="Monday")
+        fitness_app_singleton.add_exercise_to_card(new_card1.card_id, "Stacco da terra", sets=5, reps=3,
+                                                   day="Wednesday")
         fitness_app_singleton.add_exercise_to_card(new_card1.card_id, "Trazioni", sets=5, reps=3, day="Wednesday")
-        fitness_app_singleton.add_exercise_to_card(new_card1.card_id, "Rematore con bilancere", sets=4, reps=6, day="Wednesday")
+        fitness_app_singleton.add_exercise_to_card(new_card1.card_id, "Rematore con bilancere", sets=4, reps=6,
+                                                   day="Wednesday")
         fitness_app_singleton.add_exercise_to_card(new_card1.card_id, "Pull-down", sets=3, reps=12, day="Wednesday")
-        fitness_app_singleton.add_exercise_to_card(new_card1.card_id, "Posteriori a busto flesso", sets=3, reps=12, day="Wednesday")
+        fitness_app_singleton.add_exercise_to_card(new_card1.card_id, "Posteriori a busto flesso", sets=3, reps=12,
+                                                   day="Wednesday")
         fitness_app_singleton.add_exercise_to_card(new_card1.card_id, "Squat", sets=5, reps=3, day="Friday")
         fitness_app_singleton.add_exercise_to_card(new_card1.card_id, "Step up", sets=4, reps=5, day="Friday")
-        fitness_app_singleton.add_exercise_to_card(new_card1.card_id, "Stacchi a gambe tese", sets=4, reps=6, day="Friday")
+        fitness_app_singleton.add_exercise_to_card(new_card1.card_id, "Stacchi a gambe tese", sets=4, reps=6,
+                                                   day="Friday")
         fitness_app_singleton.add_exercise_to_card(new_card1.card_id, "Leg extension", sets=3, reps=10, day="Friday")
         fitness_app_singleton.add_exercise_to_card(new_card1.card_id, "Leg Curl", sets=3, reps=10, day="Friday")
 
-
         new_card2 = fitness_app_singleton.create_training_card(user_id=1)
-        fitness_app_singleton.add_exercise_to_card(new_card2.card_id, "Leg press inclinata", sets=4, reps=8, day="Monday")
+        fitness_app_singleton.add_exercise_to_card(new_card2.card_id, "Leg press inclinata", sets=4, reps=8,
+                                                   day="Monday")
         fitness_app_singleton.add_exercise_to_card(new_card2.card_id, "Chest press", sets=4, reps=8, day="Monday")
         fitness_app_singleton.add_exercise_to_card(new_card2.card_id, "Squat", sets=4, reps=10, day="Monday")
         fitness_app_singleton.add_exercise_to_card(new_card2.card_id, "Leg Curl", sets=4, reps=8, day="Monday")
         fitness_app_singleton.add_exercise_to_card(new_card2.card_id, "Alzate laterali", sets=3, reps=15, day="Monday")
-        fitness_app_singleton.add_exercise_to_card(new_card2.card_id, "Stacco da terra", sets=5, reps=3, day="Wednesday")
+        fitness_app_singleton.add_exercise_to_card(new_card2.card_id, "Stacco da terra", sets=5, reps=3,
+                                                   day="Wednesday")
         fitness_app_singleton.add_exercise_to_card(new_card2.card_id, "Trazioni", sets=5, reps=6, day="Wednesday")
         fitness_app_singleton.add_exercise_to_card(new_card2.card_id, "Lat Machine", sets=4, reps=8, day="Wednesday")
-        fitness_app_singleton.add_exercise_to_card(new_card2.card_id, "Curl con bilancere", sets=5, reps=5, day="Wednesday")
-        fitness_app_singleton.add_exercise_to_card(new_card2.card_id, "Curl ai cavi alti", sets=2, reps=12, day="Wednesday")
+        fitness_app_singleton.add_exercise_to_card(new_card2.card_id, "Curl con bilancere", sets=5, reps=5,
+                                                   day="Wednesday")
+        fitness_app_singleton.add_exercise_to_card(new_card2.card_id, "Curl ai cavi alti", sets=2, reps=12,
+                                                   day="Wednesday")
         fitness_app_singleton.add_exercise_to_card(new_card2.card_id, "Panca piana", sets=4, reps=6, day="Friday")
-        fitness_app_singleton.add_exercise_to_card(new_card2.card_id, "Spinte panca inclinata", sets=4, reps=8, day="Friday")
+        fitness_app_singleton.add_exercise_to_card(new_card2.card_id, "Spinte panca inclinata", sets=4, reps=8,
+                                                   day="Friday")
         fitness_app_singleton.add_exercise_to_card(new_card2.card_id, "Push-down", sets=3, reps=15, day="Friday")
         fitness_app_singleton.add_exercise_to_card(new_card2.card_id, "Dips", sets=3, reps=15, day="Friday")
         fitness_app_singleton.add_exercise_to_card(new_card2.card_id, "Alzate laterali", sets=4, reps=12, day="Friday")
@@ -71,7 +86,7 @@ def home_card_displayer():
 
 
 def Load_exercise():
-    #caricicamento esercizi
+    # caricicamento esercizi
     exercise_list = []
     new_exercises = Exercise.query.all()
     for exercise in new_exercises:
@@ -82,8 +97,14 @@ def Load_exercise():
         exercise_list.append(exercise_dict)
     return jsonify({'exercise_list': exercise_list})
 
-def LoadCardFromDb():
-    #caricicamento schede
+
+def LoadCardFromDb(data=None):
+    token = data.get('token')
+    encoded_token = quote(token)
+    decoded_token = jwt.decode(encoded_token, key=SECRET_KEY, algorithms=['HS256'])
+    userId = decoded_token['user_id']
+
+    # caricicamento schede
     # Eseguire una query con un join tra le tabelle TrainingCard_ e ExercisesCards_
     query_result = db.session.query(
         TrainingCard_.id,
@@ -122,4 +143,45 @@ def LoadCardFromDb():
 
     # Convertire il dizionario in una lista
     training_cards_list = list(training_cards_dict.values())
-    return jsonify({'user_cards': training_cards_list})
+
+    # restituisco anche i dati relativi alle schede preferite
+    favorites_list = []
+    favorites_card = cardsFavoreites.query.all()
+    logging.error(f"user_id:{userId}")
+    for fav in favorites_card:
+        if fav.id_utente == userId:
+            fav_dict = {
+                'user_id': str(fav.id_utente),
+                'card_id': str(fav.id_card)
+            }
+            favorites_list.append(fav_dict)
+
+    logging.error(f"favorite_list{favorites_list}")
+    return jsonify({'user_cards': training_cards_list,'favorites_list': favorites_list})
+
+
+def add_favorite_card(data=None):
+    token = data.get('token')
+    encoded_token = quote(token)
+    decoded_token = jwt.decode(encoded_token, key=SECRET_KEY, algorithms=['HS256'])
+    user_id = decoded_token['user_id']
+    cardId = data.get('trainingCrad_id')
+
+    cardFavorite = cardsFavoreites(id_utente=user_id, id_card=cardId)
+    db.session.add(cardFavorite)
+    db.session.commit()
+
+    return jsonify({"state": 0})
+
+def remove_favorite_card(data=None):
+    token = data.get('token')
+    encoded_token = quote(token)
+    decoded_token = jwt.decode(encoded_token, key=SECRET_KEY, algorithms=['HS256'])
+    userId = decoded_token['user_id']
+    cardId = data.get('trainingCrad_id')
+
+    card_da_elimi = db.session.query(cardsFavoreites).filter(cardsFavoreites.id_utente == userId, cardsFavoreites.id_card == cardId).first()
+    db.session.delete(card_da_elimi)
+    db.session.commit()
+
+    return jsonify({"state": 0})

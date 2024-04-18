@@ -7,13 +7,49 @@ from home import fitness_app_singleton
 from models.user import TrainingCard_, db, ExercisesCards_, User
 
 SECRET_KEY = "mysecretkey"
-
+exe_list = []
 #FUNZIONE PER LA CREAZIONE DI UNA NUOVA TRAINING CARD
-def New_card(data=None):
+
+def add_exercise(data=None):
     token = data.get('token')
     encoded_token = quote(token)
     decoded_token = jwt.decode(encoded_token, key=SECRET_KEY, algorithms=['HS256'])
-    user_id = decoded_token['user_id']
+    id = decoded_token['user_id']
+
+    exe = data.get('dizionario')
+
+
+    if exe['day'] == '' or exe['name'] == '' or exe['reps'] == 0 or exe['sets']== 0:
+        return jsonify({'state': 0})
+    day = exe['day']
+    name = exe['name']
+    reps = int(exe['reps'])
+    sets = int(exe['sets'])
+    exe_dict = {
+        'day': day,
+        'name': name,
+        'sets': sets,
+        'reps': reps
+    }
+    exe_list.append(exe_dict)
+    logging.error(exe_list)
+    #lista di appoggio contenente tutti gli esercizi
+
+    return jsonify({'state': 1})
+
+
+def confirm_creation_card(data=None):
+    token = data.get('token')
+    encoded_token = quote(token)
+    decoded_token = jwt.decode(encoded_token, key=SECRET_KEY, algorithms=['HS256'])
+    id = decoded_token['user_id']
+
+    #user_cards = fitness_app_singleton.get_user_training_cards(user_id=id)
+    #card = user_cards[-1]
+
+    if data.get('name') == '':
+        return jsonify({'state': 0})
+    name_card = data.get('name')
 
     #ottengo l'ultimo id dal db
     last_id = db.session.query(func.max(TrainingCard_.id)).scalar()
@@ -25,77 +61,24 @@ def New_card(data=None):
 
     newCard_id = last_id +1
 
-    Create_new_card = fitness_app_singleton.create_training_card(user_id=user_id,card_id=newCard_id)
+    Create_new_card = fitness_app_singleton.create_training_card(user_id=id,card_id=newCard_id)
     logging.error(f"id nuova scheda: {Create_new_card.card_id}")
     logging.error(Create_new_card.user_id)
-    updated_user_cards = fitness_app_singleton.get_user_training_cards(user_id=user_id)
+    #aggiungo al db
+    #_card_ = TrainingCard_(user_id=id,name=name_card)
+    #db.session.add(_card_)
 
-    return jsonify({'user_cards': updated_user_cards})
+    #aggiungo gli esercizi
+    for exe in exe_list:
+        fitness_app_singleton.add_exercise_to_card(Create_new_card.card_id, exercise_name=exe['name'], sets=exe['sets'], reps=exe['reps'], day=exe['day'])
+        #aggiungo al db
+        #new_exercise_card = ExercisesCards_(id_train_card= Create_new_card.card_id,name=exe["name"], sets=exe["sets"], reps=exe["reps"], day=exe["day"])
+        #db.session.add(new_exercise_card)
 
-def add_exercise(data=None):
-    token = data.get('token')
-    encoded_token = quote(token)
-    decoded_token = jwt.decode(encoded_token, key=SECRET_KEY, algorithms=['HS256'])
-    id = decoded_token['user_id']
-
-
-    train_card = data.get("train_card")
-    cardIid = train_card.get('card_id')
-    exercises = train_card.get('exercises')
-
-    for exercise in exercises:
-        if exercise['day'] == '' or exercise['name'] == '' or exercise['reps'] == 0 or exercise['sets']== 0:
-            return jsonify({'state': 0})
-        day = exercise['day']
-        name = exercise['name']
-        reps = exercise['reps']
-        sets = exercise['sets']
-
-    fitness_app_singleton.add_exercise_to_card(cardIid, exercise_name=name, sets=sets, reps=reps, day=day)
-    logging.error(fitness_app_singleton.get_user_training_cards(id))
-
-    return jsonify({'state': 1})
-
-
-def confirm_creation_card(data=None):
-    token = data.get('token')
-    encoded_token = quote(token)
-    decoded_token = jwt.decode(encoded_token, key=SECRET_KEY, algorithms=['HS256'])
-    id = decoded_token['user_id']
-
-    user_cards = fitness_app_singleton.get_user_training_cards(user_id=id)
-    card = user_cards[-1]
-
-    if data.get('name') == '':
-        return jsonify({'state': 0})
-    name_card = data.get('name')
-    _card_ = TrainingCard_(id=card["card_id"],user_id=id,name=name_card)
-    db.session.add(_card_)
-
-    exercises = card["exercises"]
-    for exe in exercises:
-        _exe_ = ExercisesCards_(id_train_card=card["card_id"],name=exe["name"],sets=exe["sets"],reps=exe["reps"],day=exe["day"])
-        db.session.add(_exe_)
-
-
-    db.session.commit()
-
-    return jsonify({'state': 1})
-
-
-#nel caso in cui un utente apre la pagina di creazione di una scheda ma prima di inserirla nel db
-#torna alla pagina precedente allora la scheda va eliminata altrimenti aprendo nuovamnete
-#la pagina di creazione ne verrà creata una nuova
-def remove_from_list(data=None):
-    token = data.get('token')
-    encoded_token = quote(token)
-    decoded_token = jwt.decode(encoded_token, key=SECRET_KEY, algorithms=['HS256'])
-    id = decoded_token['user_id']
-
-    user_cards = fitness_app_singleton.get_user_training_cards(user_id=id)
-    user_cards.pop(-1)
-    logging.error("dopo remove")
-    logging.error(fitness_app_singleton.get_user_training_cards(id))
+    #db.session.commit()
+    #svuoto la lista provvisoria una volta ver aggiunto gli esercizi alla training card
+    exe_list.clear()
+    logging.error(fitness_app_singleton.get_user_training_cards(user_id=id))
     return jsonify({'state': 1})
 
 
@@ -109,7 +92,7 @@ def delete_trainingCard(data=None):
         user= db.session.query(User).filter(User.id == id, User.password== data.get('password_')).first()
         if user:
             #Recupero la scheda da eliminare
-            scheda_da_elimi = db.session.query(TrainingCard_).filter(TrainingCard_.id == data.get('id_scheda') ).first()
+            scheda_da_elimi = db.session.query(TrainingCard_).filter(TrainingCard_.id == data.get('id_scheda')).first()
             if scheda_da_elimi:
                 #recupero tutti gli esercizi di quella scheda
                 esercizi_da_elim = db.session.query(ExercisesCards_).filter(ExercisesCards_.id_train_card == data.get('id_scheda')).all()

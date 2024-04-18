@@ -21,7 +21,7 @@
                 <Button  Margin="5,5,25,5" Click="Exercise_ButtonClick" Background="Transparent" BorderBrush="Transparent">
                     <Image Source="C:\Users\abuzz\OneDrive\Desktop\Elab_APL\image\icona2.png" Width="35" Height="30"/>
                 </Button>
-                <Button  Margin="5,5,25,5" Background="Transparent" BorderBrush="Transparent">
+                <Button  Margin="5,5,25,5"  Click="Statistiche_ButtonClick" Background="Transparent" BorderBrush="Transparent">
                     <Image Source="C:\Users\abuzz\OneDrive\Desktop\Elab_APL\image\icona3.png" Width="35" Height="30"/>
                 </Button>
                 <Button  Margin="5,5,25,5" Click="Setting_Click" Background="Transparent" BorderBrush="Transparent">

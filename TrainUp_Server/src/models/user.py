@@ -35,3 +35,14 @@ class ExercisesCards_(db.Model):
     day = db.Column(db.Text)
 
     training_card = relationship('TrainingCard_')
+    #exercise = relationship(Exercise)
+
+
+class cardsFavoreites(db.Model):
+    __tablename__ = 'cards_favoreites'
+    id_favorite = db.Column(db.Integer, primary_key=True)
+    id_utente = db.Column(db.Integer,db.ForeignKey('user.id'), nullable=False)
+    id_card = db.Column(db.Integer,db.ForeignKey('training_card.id'), nullable=False)
+
+    user = relationship('User')
+    training_card = relationship('TrainingCard_')

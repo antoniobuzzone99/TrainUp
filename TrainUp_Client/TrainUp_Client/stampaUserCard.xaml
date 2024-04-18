@@ -21,7 +21,7 @@
         </Grid>
 
         <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="10,0,10,65">
-            <StackPanel Name="cardPanel" Margin="34,32,87,120" Width="419" Height="523"/>
+            <StackPanel Name="cardPanel"  Width="480" Height="562"/>
         </ScrollViewer>
 
     </Grid>

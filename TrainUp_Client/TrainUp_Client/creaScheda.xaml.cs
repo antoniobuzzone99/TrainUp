@@ -26,11 +26,11 @@ namespace TrainUp_Client
     public partial class creaScheda : Page
     {
         private readonly string token;
-        private readonly UserCard train_card;
-        public creaScheda(string token, UserCard trainingCard)
+        //private readonly UserCard train_card;
+        public creaScheda(string token)
         {
 
-            this.train_card = trainingCard;
+            //this.train_card = trainingCard;
             this.token = token;
             InitializeComponent();
             loadExerciseFromDb();
@@ -67,31 +67,22 @@ namespace TrainUp_Client
 
         private async void BackButton_Click(object sender, RoutedEventArgs e)
         {
-            using (HttpClient client = new HttpClient())
+            if (Application.Current.MainWindow is MainWindow mainWindow && mainWindow.MainFrame != null)
             {
-                string url = "http://localhost:5000/remove_from_list";
-                var data = new { token };
-                var content = new StringContent(JsonSerializer.Serialize(data), Encoding.UTF8, "application/json");
-                HttpResponseMessage response = await client.PostAsync(url, content);
-                string jsonString = await response.Content.ReadAsStringAsync();
-                var responseObject = JsonSerializer.Deserialize<Dictionary<string, int>>(jsonString);
-                //int state = (int)responseObject["state"];
-
-                if (Application.Current.MainWindow is MainWindow mainWindow && mainWindow.MainFrame != null)
+                // Accedi al NavigationService del Frame dalla finestra principale
+                if (Application.Current.MainWindow is MainWindow && mainWindow.MainFrame != null)
                 {
-                    // Accedi al NavigationService del Frame dalla finestra principale
-                    if (Application.Current.MainWindow is MainWindow && mainWindow.MainFrame != null)
-                    {
-                        // Naviga verso una nuova pagina
-                        mainWindow.MainFrame.NavigationService.Navigate(new Page1(token));
-                    }
+                    // Naviga verso una nuova pagina
+                    mainWindow.MainFrame.NavigationService.Navigate(new Page1(token));
                 }
             }
+            
 
         }
 
         
-        private async void AddExerciseButtonClick(object sender, RoutedEventArgs e) {
+        private async void Add_exercise_buttonClick(object sender, RoutedEventArgs e) {
+
             string selectedText_day = "";
             if (list_day.SelectedItem != null)
             {
@@ -125,20 +116,27 @@ namespace TrainUp_Client
                 rep = int.Parse(rep_);
             }
 
-            //aggiungo gli esercizi alla card che ho ricevuto come parametro alla page
-            Exercise exe = new Exercise();
-            exe.Name = selectedItem_exe;
-            exe.Sets = set;
-            exe.Day = selectedText_day;
-            exe.Reps = rep;
-            // Aggiungi l'esercizio alla lista di esercizi nella scheda utente
-            train_card.Exercises.Add(exe);
 
+            Dictionary<string, string> dizionario = new Dictionary<string, string>();
+
+            string sets_ = set.ToString();
+            string reps_ = rep.ToString();
+
+            // Aggiunta di elementi al dizionario
+            dizionario.Add("name", selectedItem_exe);
+            dizionario.Add("day", selectedText_day);
+            dizionario.Add("sets", sets_);
+            dizionario.Add("reps", reps_);
+
+            foreach (var coppia in dizionario)
+            {
+                Debug.WriteLine($"Chiave: {coppia.Key}, Valore: {coppia.Value}");
+            }
 
             using (HttpClient client = new HttpClient())
             {
                 string url = $"http://localhost:5000/add_exe_card";
-                var data = new { token, train_card };
+                var data = new { token, dizionario};
 
                // Converti i dati in formato JSON
                string jsonData = JsonSerializer.Serialize(data);
@@ -177,6 +175,7 @@ namespace TrainUp_Client
                 string url = $"http://localhost:5000/confirm_creation_card";
                 var data = new { token, name};
 
+
                 // Converti i dati in formato JSON
                 string jsonData = JsonSerializer.Serialize(data);
 
@@ -200,6 +199,7 @@ namespace TrainUp_Client
                     outLabelsuccess.Visibility = Visibility.Visible;
                     outLabelfault.Visibility = Visibility.Hidden;
                 }
+
 
 
             }

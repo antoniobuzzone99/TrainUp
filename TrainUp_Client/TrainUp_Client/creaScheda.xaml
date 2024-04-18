@@ -41,7 +41,7 @@
         <Label Name="day_label" Content="Giorni" HorizontalAlignment="Left" Margin="87,75,0,0" VerticalAlignment="Top"/>
         <Label Name="exercise_label"  Content="Seleziona esrcizio" HorizontalAlignment="Left" Margin="26,203,0,0" VerticalAlignment="Top"/>
         <Button Name="New_card"  Content="Crea scheda" BorderBrush="Black" Background="DarkOliveGreen" Foreground="White" HorizontalAlignment="Left" Margin="306,484,0,0" VerticalAlignment="Top" Width="120" Click="ConfirmCreationCardButtonClick" />
-        <Button Name="add_exercise" Content="Aggiungi esercizio" BorderBrush="Black" Background="DarkOliveGreen" Foreground="White" HorizontalAlignment="Left" Margin="306,417,0,0" VerticalAlignment="Top" Width="120" Click="AddExerciseButtonClick" />
+        <Button Name="add_exercise" Content="Aggiungi esercizio" BorderBrush="Black" Background="DarkOliveGreen" Foreground="White" HorizontalAlignment="Left" Margin="306,417,0,0" VerticalAlignment="Top" Width="120" Click="Add_exercise_buttonClick" />
         <Label x:Name="set_label" Content="Set" HorizontalAlignment="Left" Margin="102,322,0,0" VerticalAlignment="Top"/>
         <Label x:Name="rep_label" Content="Rep" HorizontalAlignment="Left" Margin="99,364,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="set_testbox" HorizontalAlignment="Left" Margin="153,326,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="273"/>

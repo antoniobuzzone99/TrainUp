@@ -88,34 +88,22 @@ namespace WpfApp1
 
         private async void New_card_ClickAsync(object sender, RoutedEventArgs e) {
             //inizializzo la scheda
-            using (HttpClient client = new HttpClient())
-            {
-                string url = $"http://localhost:5000/card_inizialize";
-                var data = new { token };
-
-                var content = new StringContent(JsonSerializer.Serialize(data), Encoding.UTF8, "application/json");
-                HttpResponseMessage response = await client.PostAsync(url, content);
-                string jsonString = await response.Content.ReadAsStringAsync();
-
-                JsonResponse jsonResponse = JsonSerializer.Deserialize<JsonResponse>(jsonString);
-                var trainingCards = jsonResponse.UserCards;
-
-
+            
                 //creo una nuova scheda passo come parametro alla pagina per aggiungere esercizi prendedno l'ultima elemento della lista ovvero l'ultima scheda creata
-                UserCard NewUserCard = trainingCards[trainingCards.Count - 1];
-                NewUserCard.Exercises = new List<Exercise>();
+                //UserCard NewUserCard = trainingCards[trainingCards.Count - 1];
+                //NewUserCard.Exercises = new List<Exercise>();
 
-                if (Application.Current.MainWindow is MainWindow mainWindow && mainWindow.MainFrame != null)
+            if (Application.Current.MainWindow is MainWindow mainWindow && mainWindow.MainFrame != null)
+            {
+                // Accedi al NavigationService del Frame dalla finestra principale
+                if (Application.Current.MainWindow is MainWindow && mainWindow.MainFrame != null)
                 {
-                    // Accedi al NavigationService del Frame dalla finestra principale
-                    if (Application.Current.MainWindow is MainWindow && mainWindow.MainFrame != null)
-                    {
-                        // Naviga verso una nuova pagina
-                        mainWindow.MainFrame.NavigationService.Navigate(new creaScheda(token, NewUserCard));
-                    }
+                    // Naviga verso una nuova pagina
+                    mainWindow.MainFrame.NavigationService.Navigate(new creaScheda(token));
                 }
-                
             }
+                
+            
         }
 
         private void Setting_Click(object sender, RoutedEventArgs e)
@@ -144,6 +132,21 @@ namespace WpfApp1
                 {
                     // Naviga verso una nuova pagina
                     mainWindow.MainFrame.NavigationService.Navigate(new Page5(token));
+                }
+            }
+        }
+
+        private void Statistiche_ButtonClick(object sender, RoutedEventArgs e)
+        {
+            //stampa gli esercizi della scheda
+
+            if (Application.Current.MainWindow is MainWindow mainWindow && mainWindow.MainFrame != null)
+            {
+                // Accedi al NavigationService del Frame dalla finestra principale
+                if (Application.Current.MainWindow is MainWindow && mainWindow.MainFrame != null)
+                {
+                    // Naviga verso una nuova pagina
+                    mainWindow.MainFrame.NavigationService.Navigate(new statistiche(token));
                 }
             }
         }
@@ -222,16 +225,33 @@ namespace WpfApp1
             {
 
                 string url = "http://localhost:5000/LoadCardFromDb";
+                var data = new { token };
 
-                var content = new StringContent(JsonSerializer.Serialize("data"), Encoding.UTF8, "application/json");
+                // Converti i dati in formato JSON
+                string jsonData = JsonSerializer.Serialize(data);
+
+                // Crea un oggetto StringContent con il JSON
+                StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+
+                // Esegui la richiesta HTTP POST
                 HttpResponseMessage response = await client.PostAsync(url, content);
-                string jsonString = await response.Content.ReadAsStringAsync();
 
-                JsonResponse jsonResponse = JsonSerializer.Deserialize<JsonResponse>(jsonString);
+                // Leggi la risposta come stringa
+                string responseString = await response.Content.ReadAsStringAsync();
+
+                JsonResponse jsonResponse = JsonSerializer.Deserialize<JsonResponse>(responseString);
                 var trainingCards = jsonResponse.UserCards;
 
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                };
 
-                
+                FavoriteResponse dati = JsonSerializer.Deserialize<FavoriteResponse>(responseString, options);
+                var listfavorites = dati.favorites_list;
+
+
+
                 foreach (var card in trainingCards)
                 {
                    
@@ -249,13 +269,24 @@ namespace WpfApp1
                         button.Height = 30;
                         button.FontFamily = new FontFamily("Georgia");
                         button.Margin = new Thickness(0, 0, 0, 10);
-                        CardPanel2.Children.Add(button);
 
+
+                        foreach (var fav in listfavorites)
+                        {
+                            
+                            if (int.Parse(fav.card_id) == card.CardId)
+                            {
+                                button.Background = new SolidColorBrush(Colors.GreenYellow);
+
+                            }
+                        }
+
+                        CardPanel2.Children.Add(button);
                         // Aggiunta del gestore dell'evento senza chiamarlo direttamente
                         button.Click += (sender, e) => UserCardButtonClick(sender, e, card);
-
                     }
                 }
+
 
             }
         }
@@ -309,6 +340,21 @@ namespace WpfApp1
 
         [JsonPropertyName("sets")]
         public int Sets { get; set; }
+    }
+
+    //favorites
+    public class Favorite{
+        [JsonPropertyName("user_id")]
+        public string user_id { get; set; }
+
+        [JsonPropertyName("card_id")]
+        public string card_id { get; set; }
+    }
+
+    public class FavoriteResponse
+    {
+        [JsonPropertyName("favorites_list")]
+        public List<Favorite> favorites_list { get; set; }
     }
 
 }

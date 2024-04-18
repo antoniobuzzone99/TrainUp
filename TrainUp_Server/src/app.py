@@ -1,6 +1,8 @@
 from flask import request, Flask
-from home import home_card_displayer, Load_exercise, LoadCardFromDb
-from NewCard import New_card, add_exercise, confirm_creation_card, remove_from_list, delete_trainingCard
+
+from TrainUp_Server.src.Statistiche import cards_most_used
+from home import home_card_displayer, Load_exercise, LoadCardFromDb, add_favorite_card, remove_favorite_card
+from NewCard import add_exercise, confirm_creation_card, remove_from_list, delete_trainingCard
 from models.user import db
 from auth import user_login, user_register, user_logout, update_data, update_password
 
@@ -46,11 +48,6 @@ def updatePass():
     data = request.get_json()
     return update_password(data)
 
-@app.route("/card_inizialize", methods=['GET', 'POST'])
-def newCard():
-    data = request.get_json()
-    return New_card(data)
-
 @app.route("/add_exe_card", methods=['GET', 'POST'])
 def addExe():
     data = request.get_json()
@@ -61,19 +58,31 @@ def confrim():
     data = request.get_json()
     return confirm_creation_card(data)
 
-@app.route("/remove_from_list", methods=['GET', 'POST'])
-def removeFromList():
-    data = request.get_json()
-    return remove_from_list(data)
-
 @app.route("/LoadCardFromDb", methods=['GET', 'POST'])
 def LoadCard():
-    return LoadCardFromDb()
+    data = request.get_json()
+    return LoadCardFromDb(data)
 
 @app.route("/delete_trainingCard", methods=['GET', 'POST'])
 def delete():
     data = request.get_json()
     return delete_trainingCard(data)
+
+@app.route("/add_favorite_card", methods=['GET', 'POST'])
+def addFav():
+    data = request.get_json()
+    return add_favorite_card(data)
+
+@app.route("/remove_favorite_card", methods=['GET', 'POST'])
+def removeFav():
+    data = request.get_json()
+    return remove_favorite_card(data)
+
+@app.route("/cards_most_used", methods=['GET', 'POST'])
+def statFav():
+    return cards_most_used()
+
+
 @app.before_request
 def init_db():
     with app.app_context():
