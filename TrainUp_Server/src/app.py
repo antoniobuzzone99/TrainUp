@@ -1,6 +1,6 @@
 from flask import request, Flask
 
-from TrainUp_Server.src.Statistiche import cards_most_used
+from TrainUp_Server.src.Statistiche import cards_most_used, numberExe, averageAge
 from home import home_card_displayer, Load_exercise, LoadCardFromDb, add_favorite_card, remove_favorite_card
 from NewCard import add_exercise, confirm_creation_card, delete_trainingCard, clear_list_exercise
 from models.user import db
@@ -85,6 +85,14 @@ def removeFav():
 @app.route("/cards_most_used", methods=['GET', 'POST'])
 def statFav():
     return cards_most_used()
+
+@app.route("/numberExe", methods=['GET', 'POST'])
+def num_Exe():
+    return numberExe()
+
+@app.route("/ave_age", methods=['GET', 'POST'])
+def ave_Age():
+    return averageAge()
 
 
 @app.before_request

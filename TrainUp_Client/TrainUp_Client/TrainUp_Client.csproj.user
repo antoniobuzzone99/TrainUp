@@ -7,7 +7,7 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="CardMostUsedViewerWindows.xaml.cs">
+    <Compile Update="ImageViewerWindows.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="creaScheda.xaml.cs">
@@ -60,7 +60,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="CardMostUsedViewerWindows.xaml">
+    <Page Update="ImageViewerWindows.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="creaScheda.xaml">

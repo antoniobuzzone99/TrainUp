@@ -141,7 +141,7 @@ namespace WpfApp1
                 if (Application.Current.MainWindow is MainWindow && mainWindow.MainFrame != null)
                 {
                     // Naviga verso una nuova pagina
-                    mainWindow.MainFrame.NavigationService.Navigate(new statistiche(token));
+                    mainWindow.MainFrame.NavigationService.Navigate(new Statistiche(token));
                 }
             }
         }

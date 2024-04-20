@@ -24,10 +24,10 @@ namespace TrainUp_Client
     /// <summary>
     /// Logica di interazione per statistiche.xaml
     /// </summary>
-    public partial class statistiche : Page
+    public partial class Statistiche : Page
     {
         private readonly string token;
-        public statistiche(string token)
+        public Statistiche(string token)
         {
             InitializeComponent();
             this.token = token;
@@ -48,8 +48,10 @@ namespace TrainUp_Client
 
         private async void OpenImageViewerWindowButton_Click(object sender, RoutedEventArgs e)
         {
+            //stampa finestra con grafico schede piu usate
             try
             {
+
                 // Fai la richiesta al server per ottenere l'immagine
                 string imageUrl = "http://localhost:5000/cards_most_used"; 
 
@@ -64,7 +66,7 @@ namespace TrainUp_Client
                         byte[] imageData = await response.Content.ReadAsByteArrayAsync();
 
                         // Visualizza l'immagine nella finestra ImageViewerWindow
-                        CardMostUsedViewerWindows imageViewerWindow = new CardMostUsedViewerWindows(imageData);
+                        ImageViewerWindows imageViewerWindow = new ImageViewerWindows(imageData);
                         imageViewerWindow.Show();
                     }
                     else
@@ -78,5 +80,76 @@ namespace TrainUp_Client
                 MessageBox.Show("Si è verificato un errore: " + ex.Message);
             }
         }
+
+        private async void OpenImageViewerWindowButton_Click2(object sender, RoutedEventArgs e)
+        {
+            //Numero di esercizi per Card
+            try
+            {
+                // Fai la richiesta al server per ottenere l'immagine
+                string imageUrl1 = "http://localhost:5000/numberExe";
+
+                using (HttpClient client = new HttpClient())
+                {
+                    HttpResponseMessage response = await client.GetAsync(imageUrl1);
+
+                    // Controlla se la richiesta ha avuto successo
+                    if (response.IsSuccessStatusCode)
+                    {
+                        // Ottieni l'immagine come array di byte
+                        byte[] imageData1 = await response.Content.ReadAsByteArrayAsync();
+
+                        // Visualizza l'immagine nella finestra ImageViewerWindow
+                        ImageViewerWindows imageViewerWindow1 = new ImageViewerWindows(imageData1);
+                        imageViewerWindow1.Show();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Errore nel caricamento dell'immagine.");
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Si è verificato un errore: " + ex.Message);
+            }
+        }
+
+        private async void OpenImageViewerWindowButton_Click3(object sender, RoutedEventArgs e)
+        {
+            //media età utenti registrati
+            try
+            {
+                // Fai la richiesta al server per ottenere l'immagine
+                string imageUrl1 = "http://localhost:5000/ave_age";
+
+                using (HttpClient client = new HttpClient())
+                {
+                    HttpResponseMessage response = await client.GetAsync(imageUrl1);
+
+                    // Controlla se la richiesta ha avuto successo
+                    if (response.IsSuccessStatusCode)
+                    {
+                        // Ottieni l'immagine come array di byte
+                        byte[] imageData1 = await response.Content.ReadAsByteArrayAsync();
+
+                        // Visualizza l'immagine nella finestra ImageViewerWindow
+                        ImageViewerWindows imageViewerWindow1 = new ImageViewerWindows(imageData1);
+                        imageViewerWindow1.Show();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Errore nel caricamento dell'immagine.");
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Si è verificato un errore: " + ex.Message);
+            }
+        }
+
     }
 }
