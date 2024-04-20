@@ -18,7 +18,6 @@ def add_exercise(data=None):
 
     exe = data.get('dizionario')
 
-
     if exe['day'] == '' or exe['name'] == '' or exe['reps'] == 0 or exe['sets']== 0:
         return jsonify({'state': 0})
     day = exe['day']
@@ -44,9 +43,6 @@ def confirm_creation_card(data=None):
     decoded_token = jwt.decode(encoded_token, key=SECRET_KEY, algorithms=['HS256'])
     id = decoded_token['user_id']
 
-    #user_cards = fitness_app_singleton.get_user_training_cards(user_id=id)
-    #card = user_cards[-1]
-
     if data.get('name') == '':
         return jsonify({'state': 0})
     name_card = data.get('name')
@@ -55,28 +51,33 @@ def confirm_creation_card(data=None):
     last_id = db.session.query(func.max(TrainingCard_.id)).scalar()
     logging.error(f"id ultima scheda {last_id}")
     # Se non ci sono schede nel database, l'ultimo ID sarà None
-    # In tal caso, impostiamo last_id a 0 per iniziare da 1
     if last_id is None:
-        last_id = 0
+        Create_new_card = fitness_app_singleton.create_training_card(user_id=id,card_id=None)
+        logging.error(Create_new_card.card_id)
+        #aggiungo al db
+        _card_ = TrainingCard_(id=Create_new_card.card_id,user_id=id,name=name_card)
+        db.session.add(_card_)
+        db.session.commit()
+    else:
+        newCard_id = last_id +1
+        Create_new_card = fitness_app_singleton.create_training_card(user_id=id,card_id=newCard_id)
+        #aggiungo al db
+        _card_ = TrainingCard_(id=Create_new_card.card_id,user_id=id,name=name_card)
+        db.session.add(_card_)
+        db.session.commit()
 
-    newCard_id = last_id +1
-
-    Create_new_card = fitness_app_singleton.create_training_card(user_id=id,card_id=newCard_id)
     logging.error(f"id nuova scheda: {Create_new_card.card_id}")
-    logging.error(Create_new_card.user_id)
-    #aggiungo al db
-    #_card_ = TrainingCard_(user_id=id,name=name_card)
-    #db.session.add(_card_)
+    logging.error(f"id user: {Create_new_card.user_id}")
 
     #aggiungo gli esercizi
     for exe in exe_list:
         fitness_app_singleton.add_exercise_to_card(Create_new_card.card_id, exercise_name=exe['name'], sets=exe['sets'], reps=exe['reps'], day=exe['day'])
         #aggiungo al db
-        #new_exercise_card = ExercisesCards_(id_train_card= Create_new_card.card_id,name=exe["name"], sets=exe["sets"], reps=exe["reps"], day=exe["day"])
-        #db.session.add(new_exercise_card)
+        new_exercise_card = ExercisesCards_(id_train_card= Create_new_card.card_id,name=exe["name"], sets=exe["sets"], reps=exe["reps"], day=exe["day"])
+        db.session.add(new_exercise_card)
 
-    #db.session.commit()
-    #svuoto la lista provvisoria una volta ver aggiunto gli esercizi alla training card
+    db.session.commit()
+    #svuoto la lista provvisoria una volta aver aggiunto gli esercizi alla training card
     exe_list.clear()
     logging.error(fitness_app_singleton.get_user_training_cards(user_id=id))
     return jsonify({'state': 1})
@@ -104,3 +105,10 @@ def delete_trainingCard(data=None):
                 return jsonify({'state': 0})
             else: return jsonify({'state': 1})
         else:return jsonify({'state': 1})
+
+#nel caso in cui apro la pagina per creare una nuova scheda e aggiungo
+#gli esercizi senza creare la scheda, una volta essere uscito dalla pagina svuto la lista di appogio
+#degli esercizi
+def clear_list_exercise():
+    exe_list.clear()
+    return jsonify({"state": 0})

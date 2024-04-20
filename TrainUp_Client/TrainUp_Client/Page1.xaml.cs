@@ -87,11 +87,6 @@ namespace WpfApp1
         }
 
         private async void New_card_ClickAsync(object sender, RoutedEventArgs e) {
-            //inizializzo la scheda
-            
-                //creo una nuova scheda passo come parametro alla pagina per aggiungere esercizi prendedno l'ultima elemento della lista ovvero l'ultima scheda creata
-                //UserCard NewUserCard = trainingCards[trainingCards.Count - 1];
-                //NewUserCard.Exercises = new List<Exercise>();
 
             if (Application.Current.MainWindow is MainWindow mainWindow && mainWindow.MainFrame != null)
             {

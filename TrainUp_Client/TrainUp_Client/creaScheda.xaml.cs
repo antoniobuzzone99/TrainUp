@@ -67,16 +67,24 @@ namespace TrainUp_Client
 
         private async void BackButton_Click(object sender, RoutedEventArgs e)
         {
-            if (Application.Current.MainWindow is MainWindow mainWindow && mainWindow.MainFrame != null)
-            {
-                // Accedi al NavigationService del Frame dalla finestra principale
-                if (Application.Current.MainWindow is MainWindow && mainWindow.MainFrame != null)
+            using (HttpClient client = new HttpClient()) { 
+
+                string url = $"http://localhost:5000/clear_list";
+                string jsonData = JsonSerializer.Serialize("data");
+                StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+                HttpResponseMessage response = await client.PostAsync(url, content);
+                string responseString = await response.Content.ReadAsStringAsync();
+
+                if (Application.Current.MainWindow is MainWindow mainWindow && mainWindow.MainFrame != null)
                 {
-                    // Naviga verso una nuova pagina
-                    mainWindow.MainFrame.NavigationService.Navigate(new Page1(token));
+                    // Accedi al NavigationService del Frame dalla finestra principale
+                    if (Application.Current.MainWindow is MainWindow && mainWindow.MainFrame != null)
+                    {
+                        // Naviga verso una nuova pagina
+                        mainWindow.MainFrame.NavigationService.Navigate(new Page1(token));
+                    }
                 }
             }
-            
 
         }
 
@@ -128,10 +136,7 @@ namespace TrainUp_Client
             dizionario.Add("sets", sets_);
             dizionario.Add("reps", reps_);
 
-            foreach (var coppia in dizionario)
-            {
-                Debug.WriteLine($"Chiave: {coppia.Key}, Valore: {coppia.Value}");
-            }
+   
 
             using (HttpClient client = new HttpClient())
             {

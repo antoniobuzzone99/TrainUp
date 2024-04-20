@@ -2,7 +2,7 @@ from flask import request, Flask
 
 from TrainUp_Server.src.Statistiche import cards_most_used
 from home import home_card_displayer, Load_exercise, LoadCardFromDb, add_favorite_card, remove_favorite_card
-from NewCard import add_exercise, confirm_creation_card, remove_from_list, delete_trainingCard
+from NewCard import add_exercise, confirm_creation_card, delete_trainingCard, clear_list_exercise
 from models.user import db
 from auth import user_login, user_register, user_logout, update_data, update_password
 
@@ -57,6 +57,10 @@ def addExe():
 def confrim():
     data = request.get_json()
     return confirm_creation_card(data)
+
+@app.route("/clear_list", methods=['GET', 'POST'])
+def clear():
+    return clear_list_exercise()
 
 @app.route("/LoadCardFromDb", methods=['GET', 'POST'])
 def LoadCard():
