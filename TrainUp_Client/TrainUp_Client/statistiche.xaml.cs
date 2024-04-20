@@ -31,63 +31,6 @@ namespace TrainUp_Client
         {
             InitializeComponent();
             this.token = token;
-            loadCardFavorites();
-        }
-
-        
-
-        private async void loadCardFavorites() {
-
-            string imagePath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "chart.png");
-
-            using (HttpClient client = new HttpClient())
-            {
-                var response = await client.GetAsync("http://localhost:5000/cards_most_used");
-
-                if (response.IsSuccessStatusCode)
-                {
-                    using (var stream = await response.Content.ReadAsStreamAsync())
-                    {
-                        // Utilizza un blocco using per il flusso del file
-                        using (var fileStream = File.Create(imagePath))
-                        {
-                            await stream.CopyToAsync(fileStream);
-
-                        }
-
-                        // Ora il file è stato chiuso, quindi puoi creare il bitmap
-                        BitmapImage bitmap = new BitmapImage();
-                        bitmap.BeginInit();
-                        bitmap.UriSource = new Uri(imagePath, UriKind.RelativeOrAbsolute);
-                        bitmap.EndInit();
-
-
-                        // Creare un oggetto Viewbox con dimensioni desiderate e allinearla a sinistra
-                        Viewbox viewbox = new Viewbox();
-                        viewbox.Stretch = Stretch.Uniform; // Per mantenere l'aspect ratio dell'immagine
-                        viewbox.Width = 320; // Imposta la larghezza desiderata
-                        viewbox.HorizontalAlignment = HorizontalAlignment.Left; // Allinea a sinistra
-
-                        // Creare un oggetto Image e impostare la proprietà Source con l'immagine caricata
-                        Image image = new Image();
-                        image.Source = bitmap;
-
-                        // Aggiungi l'immagine al Viewbox
-                        viewbox.Child = image;
-
-                        // Aggiungi il Viewbox allo StackPanel
-                        cardPanel.Children.Add(viewbox);
-                        
-                    }
-
-                }
-                else
-                {
-                    Console.WriteLine("Failed to get the chart from the server.");
-                }
-            }
-
-
         }
 
         private void HomeButton_Click(object sender, RoutedEventArgs e)
@@ -100,6 +43,39 @@ namespace TrainUp_Client
                     // Naviga verso una nuova pagina
                     mainWindow.MainFrame.NavigationService.Navigate(new Page1(token));
                 }
+            }
+        }
+
+        private async void OpenImageViewerWindowButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                // Fai la richiesta al server per ottenere l'immagine
+                string imageUrl = "http://localhost:5000/cards_most_used"; 
+
+                using (HttpClient client = new HttpClient())
+                {
+                    HttpResponseMessage response = await client.GetAsync(imageUrl);
+
+                    // Controlla se la richiesta ha avuto successo
+                    if (response.IsSuccessStatusCode)
+                    {
+                        // Ottieni l'immagine come array di byte
+                        byte[] imageData = await response.Content.ReadAsByteArrayAsync();
+
+                        // Visualizza l'immagine nella finestra ImageViewerWindow
+                        CardMostUsedViewerWindows imageViewerWindow = new CardMostUsedViewerWindows(imageData);
+                        imageViewerWindow.Show();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Errore nel caricamento dell'immagine.");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Si è verificato un errore: " + ex.Message);
             }
         }
     }

@@ -1,11 +1,7 @@
 from io import BytesIO
-from urllib.parse import quote
-from flask import jsonify, send_file
+from flask import send_file
 from sqlalchemy import func
-import logging
-import jwt
-from home import fitness_app_singleton
-from models.user import TrainingCard_, db, ExercisesCards_, User, cardsFavoreites
+from models.user import TrainingCard_, db, cardsFavoreites
 import matplotlib.pyplot as plt
 
 SECRET_KEY = "mysecretkey"

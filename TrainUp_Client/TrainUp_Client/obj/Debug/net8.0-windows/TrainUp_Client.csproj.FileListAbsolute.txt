@@ -125,3 +125,5 @@ C:\Users\abuzz\OneDrive\Desktop\Elab_APL\TrainUp_Client\TrainUp_Client\obj\Debug
 C:\Users\abuzz\OneDrive\Desktop\Elab_APL\TrainUp_Client\TrainUp_Client\obj\Debug\net8.0-windows\stampaUserCard.baml
 C:\Users\abuzz\OneDrive\Desktop\Elab_APL\TrainUp_Client\TrainUp_Client\obj\Debug\net8.0-windows\statistiche.g.cs
 C:\Users\abuzz\OneDrive\Desktop\Elab_APL\TrainUp_Client\TrainUp_Client\obj\Debug\net8.0-windows\statistiche.baml
+C:\Users\abuzz\OneDrive\Desktop\Elab_APL\TrainUp_Client\TrainUp_Client\obj\Debug\net8.0-windows\CardMostUsedViewerWindows.g.cs
+C:\Users\abuzz\OneDrive\Desktop\Elab_APL\TrainUp_Client\TrainUp_Client\obj\Debug\net8.0-windows\CardMostUsedViewerWindows.baml

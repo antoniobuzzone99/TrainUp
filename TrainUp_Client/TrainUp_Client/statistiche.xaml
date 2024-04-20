@@ -20,9 +20,12 @@
             </StackPanel>
         </Grid>
 
-        <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="10,0,10,65">
-            <StackPanel Name="cardPanel" Margin="34,32,87,120" Width="419" Height="523"/>
-        </ScrollViewer>
+        <Button Click="OpenImageViewerWindowButton_Click" BorderBrush="Transparent" HorizontalAlignment="Center" Margin="0,80,0,0" VerticalAlignment="Top" Width="310" Height="28">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Cards più utilizzate" VerticalAlignment="Center" HorizontalAlignment="Center" Width="292"/>
+                <Image Source="C:\Users\abuzz\OneDrive\Desktop\Elab_APL\image\icona6.png" Width="12" Height="12"/>
+            </StackPanel>
+        </Button>
 
     </Grid>
 </Page>
