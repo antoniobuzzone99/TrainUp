@@ -271,7 +271,7 @@ namespace WpfApp1
                             
                             if (int.Parse(fav.card_id) == card.CardId)
                             {
-                                button.Background = new SolidColorBrush(Colors.GreenYellow);
+                                button.Background = new SolidColorBrush(Colors.DarkOliveGreen);
 
                             }
                         }
